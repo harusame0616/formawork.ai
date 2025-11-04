@@ -1,6 +1,6 @@
 {
 	"dependencies": {
-		"supabase": "^2.54.11"
+		"supabase": "catalog:"
 	},
 	"name": "@repo/supabase",
 	"packageManager": "pnpm@10.12.4",
