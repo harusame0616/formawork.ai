@@ -30,6 +30,9 @@ importers:
       '@types/react-dom':
         specifier: ^19
         version: 19.2.2(@types/react@19.2.2)
+      '@workspace/tsconfig':
+        specifier: 'workspace:'
+        version: link:../../packages/tsconfig
       eslint:
         specifier: ^9
         version: 9.39.0(jiti@2.6.1)
@@ -48,6 +51,8 @@ importers:
       supabase:
         specifier: ^2.54.11
         version: 2.54.11
+
+  packages/tsconfig: {}
 
 packages:
 
