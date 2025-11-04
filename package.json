@@ -1,6 +1,7 @@
 {
 	"devDependencies": {
-		"@biomejs/biome": "catalog:"
+		"@biomejs/biome": "catalog:",
+		"knip": "catalog:"
 	},
 	"packageManager": "pnpm@10.12.4",
 	"scripts": {
