@@ -10,9 +10,14 @@
     "moduleDetection": "force",
     "moduleResolution": "bundler",
     "noUncheckedIndexedAccess": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
     "target": "ES2022"
-  }
+  },
+  "exclude": ["node_modules"]
 }
