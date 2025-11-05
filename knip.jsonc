@@ -1,0 +1,29 @@
+{
+	"$schema": "https://unpkg.com/knip@5/schema.json",
+	"ignoreDependencies": [],
+	"workspaces": {
+		"apps/web": {
+			"ignoreDependencies": [
+				"tailwindcss",
+				// Next で builtin されているため不要
+				"postcss"
+			]
+		},
+		"packages/tsconfig": {
+			// tsconfig の plugin 設定を使っている。
+			// プラグインの解決は使用する側でされるためこちらでは不要
+			"ignoreDependencies": ["next"]
+		},
+		"packages/ui": {
+			// @source ディレクティブが Unresolved Imports 違反として検出されるため無視
+			"ignore": ["src/styles/globals.css"],
+			"ignoreDependencies": [
+				"react-dom",
+				"@tailwindcss/postcss",
+				// turbo/gen 必要か調査
+				"@turbo/gen",
+				"@types/react-dom"
+			]
+		}
+	}
+}

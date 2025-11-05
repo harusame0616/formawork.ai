@@ -1,4 +1,4 @@
-name: Lint と Format のチェック
+name: 静的解析
 
 on:
   pull_request:
@@ -29,3 +29,6 @@ jobs:
 
       - name: Biome CI チェックを実行
         run: pnpm biome ci .
+
+      - name: Knip チェックを実行
+        run: pnpm knip

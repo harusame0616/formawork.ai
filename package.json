@@ -1,9 +1,11 @@
 {
 	"devDependencies": {
-		"@biomejs/biome": "catalog:"
+		"@biomejs/biome": "catalog:",
+		"knip": "catalog:"
 	},
 	"packageManager": "pnpm@10.12.4",
 	"scripts": {
-		"validate:fix": "biome check --write ."
+		"validate:check": "biome check . && knip",
+		"validate:fix": "biome check --write . && knip --fix --allow-remove-files"
 	}
 }
