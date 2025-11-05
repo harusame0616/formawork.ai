@@ -3,8 +3,6 @@
 		"@radix-ui/react-slot": "catalog:",
 		"class-variance-authority": "catalog:",
 		"clsx": "catalog:",
-		"lucide-react": "catalog:",
-		"next-themes": "catalog:",
 		"react": "catalog:",
 		"react-dom": "catalog:",
 		"tailwind-merge": "catalog:",
@@ -16,22 +14,20 @@
 		"@types/node": "catalog:",
 		"@types/react": "catalog:",
 		"@types/react-dom": "catalog:",
-		"@workspace/tsconfig": "workspace:*",
+		"@workspace/tsconfig": "workspace:",
+		"postcss-load-config": "catalog:",
 		"tailwindcss": "catalog:",
 		"typescript": "catalog:"
 	},
 	"exports": {
 		"./components/*": "./src/components/*.tsx",
 		"./globals.css": "./src/styles/globals.css",
-		"./hooks/*": "./src/hooks/*.ts",
 		"./lib/*": "./src/lib/*.ts",
 		"./postcss.config": "./postcss.config.mjs"
 	},
 	"name": "@workspace/ui",
 	"private": true,
-	"scripts": {
-		"lint": "eslint . --max-warnings 0"
-	},
+	"scripts": {},
 	"type": "module",
 	"version": "0.0.0"
 }
