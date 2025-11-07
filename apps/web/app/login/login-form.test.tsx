@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import { userEvent } from "vitest/browser";
+import { page } from "vitest/browser";
 import { LoginForm } from "./login-form";
 
 // loginAction をモック
@@ -37,12 +37,10 @@ describe("LoginForm", () => {
 		render(<LoginForm />);
 
 		// パスワードだけを入力
-		const passwordInput = screen.getByLabelText("パスワード");
-		await userEvent.fill(passwordInput, "Test@Pass123");
+		await page.getByLabelText("パスワード").fill("Test@Pass123");
 
 		// 送信ボタンをクリック
-		const submitButton = screen.getByRole("button", { name: "ログイン" });
-		await userEvent.click(submitButton);
+		await page.getByRole("button", { name: "ログイン" }).click();
 
 		// バリデーションエラーが表示されることを確認
 		await waitFor(() => {
@@ -59,15 +57,14 @@ describe("LoginForm", () => {
 		render(<LoginForm />);
 
 		// 不正な形式のメールアドレスを入力
-		const emailInput = screen.getByRole("textbox", { name: "メールアドレス" });
-		await userEvent.fill(emailInput, "invalid-email");
+		await page
+			.getByRole("textbox", { name: "メールアドレス" })
+			.fill("invalid-email");
 
-		const passwordInput = screen.getByLabelText("パスワード");
-		await userEvent.fill(passwordInput, "Test@Pass123");
+		await page.getByLabelText("パスワード").fill("Test@Pass123");
 
 		// 送信ボタンをクリック
-		const submitButton = screen.getByRole("button", { name: "ログイン" });
-		await userEvent.click(submitButton);
+		await page.getByRole("button", { name: "ログイン" }).click();
 
 		// バリデーションエラーが表示されることを確認
 		await waitFor(() => {
@@ -84,12 +81,12 @@ describe("LoginForm", () => {
 		render(<LoginForm />);
 
 		// メールアドレスだけを入力
-		const emailInput = screen.getByRole("textbox", { name: "メールアドレス" });
-		await userEvent.fill(emailInput, "test@example.com");
+		await page
+			.getByRole("textbox", { name: "メールアドレス" })
+			.fill("test@example.com");
 
 		// 送信ボタンをクリック
-		const submitButton = screen.getByRole("button", { name: "ログイン" });
-		await userEvent.click(submitButton);
+		await page.getByRole("button", { name: "ログイン" }).click();
 
 		// バリデーションエラーが表示されることを確認
 		await waitFor(() => {
@@ -113,15 +110,14 @@ describe("LoginForm", () => {
 		render(<LoginForm />);
 
 		// 有効な入力
-		const emailInput = screen.getByRole("textbox", { name: "メールアドレス" });
-		await userEvent.fill(emailInput, "test@example.com");
+		await page
+			.getByRole("textbox", { name: "メールアドレス" })
+			.fill("test@example.com");
 
-		const passwordInput = screen.getByLabelText("パスワード");
-		await userEvent.fill(passwordInput, "Test@Pass123");
+		await page.getByLabelText("パスワード").fill("Test@Pass123");
 
 		// 送信ボタンをクリック
-		const submitButton = screen.getByRole("button", { name: "ログイン" });
-		await userEvent.click(submitButton);
+		await page.getByRole("button", { name: "ログイン" }).click();
 
 		// 送信中の状態を確認
 		await waitFor(() => {
@@ -144,15 +140,14 @@ describe("LoginForm", () => {
 		render(<LoginForm />);
 
 		// 有効な入力
-		const emailInput = screen.getByRole("textbox", { name: "メールアドレス" });
-		await userEvent.fill(emailInput, "test@example.com");
+		await page
+			.getByRole("textbox", { name: "メールアドレス" })
+			.fill("test@example.com");
 
-		const passwordInput = screen.getByLabelText("パスワード");
-		await userEvent.fill(passwordInput, "Test@Pass123");
+		await page.getByLabelText("パスワード").fill("Test@Pass123");
 
 		// 送信ボタンをクリック
-		const submitButton = screen.getByRole("button", { name: "ログイン" });
-		await userEvent.click(submitButton);
+		await page.getByRole("button", { name: "ログイン" }).click();
 
 		// エラーメッセージが表示されることを確認
 		await waitFor(() => {
@@ -171,15 +166,15 @@ describe("LoginForm", () => {
 		render(<LoginForm />);
 
 		// 有効な入力
-		const emailInput = screen.getByRole("textbox", { name: "メールアドレス" });
-		const passwordInput = screen.getByLabelText("パスワード");
+		const emailInput = page.getByRole("textbox", { name: "メールアドレス" });
+		const passwordInput = page.getByLabelText("パスワード");
 
-		await userEvent.fill(emailInput, "test@example.com");
-		await userEvent.fill(passwordInput, "WrongPass");
+		await emailInput.fill("test@example.com");
+		await passwordInput.fill("WrongPass");
 
 		// 最初の送信
-		const submitButton = screen.getByRole("button", { name: "ログイン" });
-		await userEvent.click(submitButton);
+		const submitButton = page.getByRole("button", { name: "ログイン" });
+		await submitButton.click();
 
 		// エラーメッセージが表示される
 		await waitFor(() => {
@@ -192,9 +187,9 @@ describe("LoginForm", () => {
 		} as never);
 
 		// フォームを変更して再送信
-		await userEvent.clear(passwordInput);
-		await userEvent.fill(passwordInput, "CorrectPass");
-		await userEvent.click(submitButton);
+		await passwordInput.clear();
+		await passwordInput.fill("CorrectPass");
+		await submitButton.click();
 
 		// エラーメッセージが消えることを確認
 		await waitFor(() => {
