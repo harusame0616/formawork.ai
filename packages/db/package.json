@@ -1,0 +1,28 @@
+{
+	"dependencies": {
+		"drizzle-orm": "catalog:",
+		"postgres": "catalog:",
+		"valibot": "catalog:"
+	},
+	"devDependencies": {
+		"@types/node": "catalog:",
+		"@workspace/tsconfig": "workspace:",
+		"drizzle-kit": "catalog:",
+		"typescript": "catalog:"
+	},
+	"exports": {
+		"./client": "./src/client.ts",
+		"./schema/customer": "./src/schema/customer.ts"
+	},
+	"name": "@workspace/db",
+	"private": true,
+	"scripts": {
+		"db:generate": "drizzle-kit generate",
+		"db:migrate": "drizzle-kit migrate",
+		"db:push": "drizzle-kit push",
+		"db:reset": "pnpm --filter @repo/supabase supabase:reset && pnpm db:push ",
+		"db:studio": "drizzle-kit studio"
+	},
+	"type": "module",
+	"version": "0.0.0"
+}

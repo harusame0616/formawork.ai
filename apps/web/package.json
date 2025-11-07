@@ -1,15 +1,16 @@
 {
 	"dependencies": {
-		"@harusame0616/result": "^0.1.2",
-		"@hookform/resolvers": "^5.2.2",
+		"@harusame0616/result": "catalog:",
+		"@hookform/resolvers": "catalog:",
 		"@repo/supabase": "workspace:",
+		"@workspace/db": "workspace:",
 		"@workspace/ui": "workspace:",
 		"lucide-react": "catalog:",
 		"next": "catalog:",
 		"react": "catalog:",
 		"react-dom": "catalog:",
-		"react-hook-form": "^7.66.0",
-		"valibot": "^1.1.0"
+		"react-hook-form": "catalog:",
+		"valibot": "catalog:"
 	},
 	"devDependencies": {
 		"@tailwindcss/postcss": "catalog:",

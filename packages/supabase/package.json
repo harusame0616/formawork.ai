@@ -1,10 +1,10 @@
 {
 	"dependencies": {
-		"@supabase/ssr": "^0.7.0",
-		"@supabase/supabase-js": "^2.79.0",
+		"@supabase/ssr": "catalog:",
+		"@supabase/supabase-js": "catalog:",
 		"next": "catalog:",
 		"supabase": "catalog:",
-		"valibot": "^1.1.0"
+		"valibot": "catalog:"
 	},
 	"exports": {
 		"./config": "./src/config.ts",
@@ -14,6 +14,7 @@
 	"packageManager": "pnpm@10.12.4",
 	"private": true,
 	"scripts": {
+		"supabase:reset": "supabase start && supabase stop --no-backup && supabase start",
 		"supabase:start": "supabase start"
 	},
 	"version": "0.0.0"
