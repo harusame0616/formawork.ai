@@ -5,7 +5,10 @@ export const customersTable = pgTable("customers", {
 	customerId: uuid("customer_id").primaryKey().defaultRandom(),
 	email: text("email").notNull().unique(),
 	name: text("name").notNull(),
-	updatedAt: timestamp("updated_at").defaultNow().notNull(),
+	updatedAt: timestamp("updated_at")
+		.defaultNow()
+		.notNull()
+		.$onUpdate(() => new Date()),
 });
 
 export type SelectCustomer = typeof customersTable.$inferSelect;
