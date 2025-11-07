@@ -2,8 +2,6 @@ packages:
   - apps/*
   - packages/*
 
-catalogMode: strict
-
 catalog:
   react: 19.2.0
   react-dom: 19.2.0
@@ -43,6 +41,8 @@ catalog:
   '@vitejs/plugin-react': 5.1.0
   '@vitest/ui': 4.0.8
   jsdom: 27.1.0
+
+catalogMode: strict
 
 onlyBuiltDependencies:
   - supabase
