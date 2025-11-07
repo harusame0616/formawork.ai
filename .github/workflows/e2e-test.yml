@@ -44,7 +44,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Playwright ブラウザのインストール
-        run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
+        run: pnpm --filter web exec playwright install --with-deps ${{ matrix.browser }}
 
       - name: Supabase CLI のセットアップ
         uses: supabase/setup-cli@v1
