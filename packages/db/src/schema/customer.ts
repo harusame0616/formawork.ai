@@ -1,12 +1,12 @@
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
-export const customers = pgTable("customers", {
+export const customersTable = pgTable("customers", {
 	createdAt: timestamp("created_at").defaultNow().notNull(),
+	customerId: uuid("customer_id").primaryKey().defaultRandom(),
 	email: text("email").notNull().unique(),
-	id: uuid("id").primaryKey().defaultRandom(),
 	name: text("name").notNull(),
 	updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-export type Customer = typeof customers.$inferSelect;
-export type NewCustomer = typeof customers.$inferInsert;
+export type SelectCustomer = typeof customersTable.$inferSelect;
+export type InsertCustomer = typeof customersTable.$inferInsert;

@@ -14,6 +14,7 @@
 	"packageManager": "pnpm@10.12.4",
 	"private": true,
 	"scripts": {
+		"supabase:reset": "supabase start && supabase stop --no-backup && supabase start",
 		"supabase:start": "supabase start"
 	},
 	"version": "0.0.0"
