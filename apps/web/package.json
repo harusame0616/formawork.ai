@@ -13,6 +13,7 @@
 		"valibot": "catalog:"
 	},
 	"devDependencies": {
+		"@playwright/test": "^1.56.1",
 		"@tailwindcss/postcss": "catalog:",
 		"@types/node": "catalog:",
 		"@types/react": "catalog:",
