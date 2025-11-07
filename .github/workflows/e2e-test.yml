@@ -31,14 +31,14 @@ jobs:
       - name: リポジトリのチェックアウト
         uses: actions/checkout@v5
 
+      - name: pnpm のセットアップ
+        uses: pnpm/action-setup@v4
+
       - name: Node.js のセットアップ
         uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
           cache: pnpm
-
-      - name: pnpm のセットアップ
-        uses: pnpm/action-setup@v4
 
       - name: 依存関係のインストール
         run: pnpm install --frozen-lockfile
