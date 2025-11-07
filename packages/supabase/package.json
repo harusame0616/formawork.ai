@@ -14,7 +14,8 @@
 	"packageManager": "pnpm@10.12.4",
 	"private": true,
 	"scripts": {
-		"supabase:reset": "supabase start && supabase stop --no-backup && supabase start",
+		"seed": "node --env-file=.env --experimental-strip-types src/seed.ts",
+		"supabase:reset": "supabase db reset && pnpm seed",
 		"supabase:start": "supabase start"
 	},
 	"version": "0.0.0"
