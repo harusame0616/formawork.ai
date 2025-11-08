@@ -2,6 +2,7 @@
 	"dependencies": {
 		"@harusame0616/result": "catalog:",
 		"@hookform/resolvers": "catalog:",
+		"@repo/logger": "workspace:",
 		"@repo/supabase": "workspace:",
 		"@workspace/db": "workspace:",
 		"@workspace/ui": "workspace:",
@@ -19,6 +20,7 @@
 		"@types/react": "catalog:",
 		"@types/react-dom": "catalog:",
 		"@workspace/tsconfig": "workspace:",
+		"pino-pretty": "catalog:",
 		"tailwindcss": "catalog:",
 		"typescript": "catalog:"
 	},
@@ -27,7 +29,7 @@
 	"scripts": {
 		"build": "next build",
 		"check": "biome check --write .",
-		"dev": "next dev",
+		"dev": "next dev | pino-pretty -m message -i application,environment,service,ipAddress,requestId,userId,userAgent,deploymentId,gitCommitSha",
 		"format": "biome format --write .",
 		"lint": "biome lint .",
 		"start": "next start",
