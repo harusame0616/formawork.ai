@@ -14,7 +14,7 @@ export type LoggerContext = {
 	environment: Environment;
 	service: string;
 	hostname?: string;
-	logLocation?: string;
+	codeLocation?: string;
 	[key: string]: unknown;
 };
 
