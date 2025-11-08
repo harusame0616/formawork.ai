@@ -8,7 +8,6 @@
 		"@workspace/ui": "workspace:",
 		"lucide-react": "catalog:",
 		"next": "catalog:",
-		"pino-pretty": "catalog:",
 		"react": "catalog:",
 		"react-dom": "catalog:",
 		"react-hook-form": "catalog:",
@@ -21,6 +20,7 @@
 		"@types/react": "catalog:",
 		"@types/react-dom": "catalog:",
 		"@workspace/tsconfig": "workspace:",
+		"pino-pretty": "catalog:",
 		"tailwindcss": "catalog:",
 		"typescript": "catalog:"
 	},
