@@ -31,6 +31,9 @@ jobs:
       - name: 依存関係のインストール
         run: pnpm install --frozen-lockfile
 
+      - name: Playwright ブラウザのインストール
+        run: pnpm --filter web exec playwright install --with-deps chromium
+
       - name: コンポーネントテストの実行
         run: pnpm --filter web test
 
@@ -39,5 +42,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: vitest-results
-          path: "**/screenshots__/**"
+          path: "**/__screenshots__/**"
           retention-days: 7
