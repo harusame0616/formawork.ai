@@ -12,8 +12,12 @@ vi.mock("./login-action", () => ({
 const test = base.extend<{
 	loginActionMock: Mock;
 }>({
-	// biome-ignore lint/correctness/noEmptyPattern: Vitestのfixtureパターンで使用する標準的な記法
-	loginActionMock: async ({}, use: any) => {
+	loginActionMock: async (
+		// biome-ignore lint/correctness/noEmptyPattern: Vitestのfixtureパターンで使用する標準的な記法
+		{},
+		// biome-ignore lint/suspicious/noExplicitAny: https://github.com/vitest-dev/vitest/discussions/5710
+		use: any,
+	) => {
 		const loginActionModule = await import("./login-action");
 		await use(loginActionModule.loginAction);
 		vi.clearAllMocks();
