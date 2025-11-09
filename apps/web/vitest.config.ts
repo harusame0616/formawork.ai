@@ -25,7 +25,6 @@ export default defineConfig({
 			provider: playwright(),
 		},
 		exclude: ["**/node_modules/**", "**/dist/**", "**/e2e/**", "**/.next/**"],
-		globals: true,
 		include: ["**/*.test.{ts,tsx}"],
 		testTimeout: 30000,
 	},

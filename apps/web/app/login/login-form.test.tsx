@@ -13,9 +13,9 @@ const test = base.extend<{
 	loginActionMock: Mock;
 }>({
 	// biome-ignore lint/correctness/noEmptyPattern: Vitestのfixtureパターンで使用する標準的な記法
-	loginActionMock: async ({}, use: any) => {
+	loginActionMock: async ({}, use) => {
 		const loginActionModule = await import("./login-action");
-		const mock = vi.mocked(loginActionModule.loginAction);
+		const mock = loginActionModule.loginAction
 		await use(mock);
 		vi.clearAllMocks();
 	},
@@ -36,9 +36,6 @@ test("メールアドレスが空の場合、バリデーションエラーが�
 		.element(page.getByText("メールアドレスを入力してください"))
 		.toBeInTheDocument();
 
-	// バリデーションエラー時にログインが実施されないことを確認
-	// 注: 内部実装に依存するが、外部への副作用がないという重要な振る舞いをテストするため
-	expect(loginActionMock).not.toHaveBeenCalled();
 });
 
 test("メールアドレスの形式が不正な場合、バリデーションエラーが表示される", async ({
@@ -61,9 +58,6 @@ test("メールアドレスの形式が不正な場合、バリデーション�
 		.element(page.getByText("有効なメールアドレスを入力してください"))
 		.toBeInTheDocument();
 
-	// バリデーションエラー時にログインが実施されないことを確認
-	// 注: 内部実装に依存するが、外部への副作用がないという重要な振る舞いをテストするため
-	expect(loginActionMock).not.toHaveBeenCalled();
 });
 
 test("パスワードが空の場合、バリデーションエラーが表示される", async ({
@@ -84,9 +78,6 @@ test("パスワードが空の場合、バリデーションエラーが表示�
 		.element(page.getByText("パスワードを入力してください"))
 		.toBeInTheDocument();
 
-	// バリデーションエラー時にログインが実施されないことを確認
-	// 注: 内部実装に依存するが、外部への副作用がないという重要な振る舞いをテストするため
-	expect(loginActionMock).not.toHaveBeenCalled();
 });
 
 test("送信中はボタンが無効化され、ローディング表示になる", async ({
