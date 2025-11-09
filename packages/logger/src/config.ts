@@ -25,13 +25,13 @@ export function getLoggerConfig(): LoggerConfig {
 		}),
 		{
 			// biome-ignore lint/complexity/useLiteralKeys: ts(4111)
-			APP_NAME: process.env["APP_NAME"],
+			application: process.env["APP_NAME"],
 			// biome-ignore lint/complexity/useLiteralKeys: ts(4111)
-			HOST_ENVIRONMENT: process.env["HOST_ENVIRONMENT"],
+			environment: process.env["HOST_ENVIRONMENT"],
 			// biome-ignore lint/complexity/useLiteralKeys: ts(4111)
-			LOG_LEVEL: process.env["LOG_LEVEL"],
+			level: process.env["LOG_LEVEL"],
 			// biome-ignore lint/complexity/useLiteralKeys: ts(4111)
-			SERVICE_NAME: process.env["SERVICE_NAME"],
+			service: process.env["SERVICE_NAME"],
 		},
 	);
 }
