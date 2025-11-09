@@ -22,6 +22,6 @@ export default defineConfig({
 			provider: playwright(),
 		},
 		exclude: ["**/node_modules/**", "**/dist/**", "**/e2e/**", "**/.next/**"],
-		include: ["**/*.test.{ts,tsx}"],
+		include: ["**/*.browser.test.{ts,tsx}"],
 	},
 });

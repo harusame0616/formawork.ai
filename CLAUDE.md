@@ -190,6 +190,14 @@ Next.js は、それぞれ異なるユースケース向けに設計された 3 
 
 テストは品質保証の基盤であり、すべての新機能に対して必須である。
 
+**テストファイルの命名規則:**
+
+テストファイル名は以下の命名規則に従うこと：
+
+- **E2Eテスト**: `*.e2e.test.{ts,tsx}` （例: `login.e2e.test.ts`）
+- **ブラウザテスト（UI/hooks）**: `*.browser.test.{ts,tsx}` （例: `login-form.browser.test.tsx`）
+- **サーバーテスト（Server Action/RSC/Route Handler）**: `*.server.test.{ts,tsx}` （例: `login-action.server.test.ts`）
+
 **テスト哲学:**
 
 - **公開インターフェースのテスト**: 公開された API、関数、コンポーネントの動作をテストすること
