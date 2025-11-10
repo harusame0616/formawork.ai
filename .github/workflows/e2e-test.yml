@@ -7,7 +7,7 @@ on:
       - main
 
 concurrency:
-  group: medium-e2e-${{ github.ref }}
+  group: e2e-test-${{ github.ref }}
   cancel-in-progress: true
 
 env:
