@@ -13,6 +13,22 @@ export default defineConfig({
 	test: {
 		projects: [
 			{
+				optimizeDeps: {
+					include: [
+						"react/jsx-dev-runtime",
+						"vitest-browser-react",
+						"next/navigation",
+						"lucide-react",
+						"react",
+						"valibot",
+						"@hookform/resolvers/valibot",
+						"react-hook-form",
+						"@radix-ui/react-slot",
+						"class-variance-authority",
+						"clsx",
+						"tailwind-merge",
+					],
+				},
 				test: {
 					browser: {
 						enabled: true,
