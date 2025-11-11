@@ -33,8 +33,8 @@
 
 ## コーディングスタイル
 
-- 型定義では type を優先する
-- 関数定義では function を優先する
+- 型定義を行う場合は interface より type を優先する
+- 関数定義ではアロー関数より function を優先する
 - TypeScript ネイティブの Enum の利用は避け Object Literal を使用する
 - **環境変数へのアクセス**: 環境変数に直接アクセスせず、必ず valibot でパースした値を使用すること
   - `process.env.VARIABLE_NAME` を直接使用しない
