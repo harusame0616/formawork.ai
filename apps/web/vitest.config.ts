@@ -14,6 +14,9 @@ export default defineConfig({
 		projects: [
 			{
 				optimizeDeps: {
+					// 以下のエラー対策	（cspell:disable-next-line）
+					// [vitest] Vite unexpectedly reloaded a test. This may cause tests to fail, lead to flaky behaviour or duplicated test runs.
+					// For a stable experience, please add mentioned dependencies to your config's `optimizeDeps.include` field manually.
 					include: [
 						"react/jsx-dev-runtime",
 						"vitest-browser-react",
