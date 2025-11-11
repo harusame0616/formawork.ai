@@ -485,6 +485,13 @@ logger.error({ err }, "Authentication failed");
 
 ## コマンド
 
+### 開発
+
+#### 開発サーバー起動
+```bash
+pnpm dev
+```
+
 ### テスト
 
 #### ブラウザテスト（コンポーネント/UI/hooks）
