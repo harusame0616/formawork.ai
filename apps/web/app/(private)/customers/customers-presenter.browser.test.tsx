@@ -4,10 +4,18 @@ import { render } from "vitest-browser-react";
 
 // Next.js Link をモック（インポート前にモックを定義）
 vi.mock("next/link", () => {
+	const React = require("react");
 	return {
-		default: ({ children, href }: { children: React.ReactNode; href: string }) => {
-			return <a href={href}>{children}</a>;
-		},
+		default: React.forwardRef(function Link(
+			props: { children: React.ReactNode; href: string },
+			ref: React.Ref<HTMLAnchorElement>,
+		) {
+			return React.createElement(
+				"a",
+				{ href: props.href, ref },
+				props.children,
+			);
+		}),
 	};
 });
 
@@ -20,7 +28,6 @@ vi.mock("next/navigation", () => ({
 }));
 
 import type { SelectCustomer } from "@workspace/db/schema/customer";
-import { SearchPagination } from "@workspace/ui/components/search-pagination";
 import { CustomersPresenter } from "./customers-presenter";
 
 const mockCustomers: SelectCustomer[] = [
@@ -44,7 +51,7 @@ const mockCustomers: SelectCustomer[] = [
 
 test("顧客一覧が表示される", async () => {
 	render(
-		<CustomersPresenter customers={mockCustomers} totalPages={1} page={1} />,
+		<CustomersPresenter customers={mockCustomers} page={1} totalPages={1} />,
 	);
 
 	await expect.element(page.getByText("顧客1")).toBeInTheDocument();
@@ -58,14 +65,16 @@ test("顧客一覧が表示される", async () => {
 });
 
 test("顧客が0件の場合、空のメッセージが表示される", async () => {
-	render(<CustomersPresenter customers={[]} totalPages={0} page={1} />);
+	render(<CustomersPresenter customers={[]} page={1} totalPages={0} />);
 
-	await expect.element(page.getByText("顧客がいません")).toBeInTheDocument();
+	await expect
+		.element(page.getByText("顧客が見つかりませんでした"))
+		.toBeInTheDocument();
 });
 
 test("ページネーションが表示される", async () => {
 	render(
-		<CustomersPresenter customers={mockCustomers} totalPages={3} page={2} />,
+		<CustomersPresenter customers={mockCustomers} page={2} totalPages={3} />,
 	);
 
 	// SearchPaginationコンポーネント自体のテストではないため、存在確認のみ
@@ -75,7 +84,7 @@ test("ページネーションが表示される", async () => {
 
 test("ページネーションが1ページのみの場合表示されない", async () => {
 	render(
-		<CustomersPresenter customers={mockCustomers} totalPages={1} page={1} />,
+		<CustomersPresenter customers={mockCustomers} page={1} totalPages={1} />,
 	);
 
 	// 1ページのみの場合、SearchPaginationは表示されない
