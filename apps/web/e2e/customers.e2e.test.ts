@@ -46,7 +46,10 @@ test("メニューから顧客一覧ページに遷移できる", async ({
 			.getByRole("button", { name: "メニューを開く" })
 			.first()
 			.click();
-		await expect(authenticatedPage.getByRole("dialog")).toBeVisible();
+		// メニュー内の顧客一覧リンクが表示されることを確認
+		await expect(
+			authenticatedPage.getByRole("link", { name: "顧客一覧" }),
+		).toBeVisible();
 	});
 
 	await test.step("顧客一覧リンクをクリック", async () => {
@@ -55,7 +58,9 @@ test("メニューから顧客一覧ページに遷移できる", async ({
 
 	await test.step("顧客一覧ページに遷移することを確認", async () => {
 		await expect(authenticatedPage).toHaveURL("/customers");
-		await expect(authenticatedPage.getByText("顧客一覧")).toBeVisible();
+		await expect(
+			authenticatedPage.getByRole("heading", { name: "顧客一覧" }),
+		).toBeVisible();
 	});
 });
 
