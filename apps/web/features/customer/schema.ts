@@ -20,3 +20,48 @@ const customerSearchConditionSchema = v.object({
 export type CustomerSearchConditionInput = v.InferInput<
 	typeof customerSearchConditionSchema
 >;
+
+// 顧客登録用の定数
+const CUSTOMER_NAME_MAX_LENGTH = 24;
+const CUSTOMER_EMAIL_MAX_LENGTH = 254;
+const CUSTOMER_PHONE_MAX_LENGTH = 20;
+
+// 顧客登録用のスキーマ
+export const registerCustomerSchema = v.object({
+	email: v.optional(
+		v.union([
+			v.literal(""),
+			v.pipe(
+				v.string(),
+				v.email("正しいメールアドレス形式で入力してください"),
+				v.maxLength(
+					CUSTOMER_EMAIL_MAX_LENGTH,
+					`メールアドレスは${CUSTOMER_EMAIL_MAX_LENGTH}文字以内で入力してください`,
+				),
+			),
+		]),
+		"",
+	),
+	name: v.pipe(
+		v.string("名前を入力してください"),
+		v.minLength(1, "名前を入力してください"),
+		v.maxLength(
+			CUSTOMER_NAME_MAX_LENGTH,
+			`名前は${CUSTOMER_NAME_MAX_LENGTH}文字以内で入力してください`,
+		),
+	),
+	phone: v.optional(
+		v.pipe(
+			v.string(),
+			v.transform((value) => value.replace(/-/g, "")),
+			v.regex(/^\d*$/, "電話番号は数字のみで入力してください"),
+			v.maxLength(
+				CUSTOMER_PHONE_MAX_LENGTH,
+				`電話番号は${CUSTOMER_PHONE_MAX_LENGTH}文字以内で入力してください`,
+			),
+		),
+		"",
+	),
+});
+
+export type RegisterCustomerInput = v.InferInput<typeof registerCustomerSchema>;

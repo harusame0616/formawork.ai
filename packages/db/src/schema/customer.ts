@@ -3,7 +3,7 @@ import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 export const customersTable = pgTable("customers", {
 	createdAt: timestamp("created_at").defaultNow().notNull(),
 	customerId: uuid("customer_id").primaryKey().defaultRandom(),
-	email: text("email").notNull().unique(),
+	email: text("email"),
 	name: text("name").notNull(),
 	phone: text("phone"),
 	updatedAt: timestamp("updated_at")
