@@ -10,11 +10,13 @@ export default defineProject({
 	optimizeDeps: {
 		include: [
 			"react/jsx-dev-runtime",
+			"react/jsx-runtime",
 			"vitest-browser-react",
 			"next/navigation",
 			"next/link",
 			"lucide-react",
 			"react",
+			"react-dom",
 			"valibot",
 			"@hookform/resolvers/valibot",
 			"react-hook-form",
@@ -31,6 +33,7 @@ export default defineProject({
 		alias: {
 			"@": path.resolve(__dirname, "./"),
 		},
+		dedupe: ["react", "react-dom"],
 	},
 	test: {
 		projects: [
