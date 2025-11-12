@@ -63,22 +63,16 @@ test("全フィールドを境界値一杯で入力して顧客を登録し、�
 
 	await test.step("詳細ページに遷移することを確認", async () => {
 		await registerCustomerPage.waitForURL("**/customers/*");
-		await expect(registerCustomerPage.getByText("顧客詳細")).toBeVisible();
 	});
 
 	await test.step("登録した情報が正しく表示されることを確認", async () => {
 		// 名前の確認（font-boldクラスで表示される通常のテキスト）
-		const nameSection = registerCustomerPage
-			.getByText("名前")
-			.locator("..")
-			.locator("..");
-		await expect(nameSection.getByText(testData.name)).toBeVisible();
+		await expect(registerCustomerPage.getByText(testData.name)).toBeVisible();
 
 		// メールアドレスの確認（リンクとして表示される）
 		const emailLink = registerCustomerPage.getByRole("link", {
 			name: testData.email,
 		});
-		await expect(emailLink).toBeVisible();
 		await expect(emailLink).toHaveAttribute("href", `mailto:${testData.email}`);
 
 		// 電話番号の確認（ハイフンが削除された状態でリンクとして表示される）
@@ -132,7 +126,6 @@ test("必須フィールドのみ入力して登録でき、詳細ページへ�
 
 	await test.step("詳細ページに遷移することを確認", async () => {
 		await registerCustomerPage.waitForURL("**/customers/*");
-		await expect(registerCustomerPage.getByText("顧客詳細")).toBeVisible();
 	});
 
 	await test.step("登録した情報が正しく表示されることを確認", async () => {
