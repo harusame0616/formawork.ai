@@ -1,15 +1,9 @@
 import path from "node:path";
 import react from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
-import { defineConfig } from "vitest/config";
+import { defineProject } from "vitest/config";
 
-export default defineConfig({
-	plugins: [react()],
-	resolve: {
-		alias: {
-			"@": path.resolve(__dirname, "./"),
-		},
-	},
+export default defineProject({
 	// 以下のエラー対策	（cspell:disable-next-line）
 	// [vitest] Vite unexpectedly reloaded a test. This may cause tests to fail, lead to flaky behaviour or duplicated test runs.
 	// For a stable experience, please add mentioned dependencies to your config's `optimizeDeps.include` field manually.
@@ -31,6 +25,12 @@ export default defineConfig({
 			"clsx",
 			"tailwind-merge",
 		],
+	},
+	plugins: [react()],
+	resolve: {
+		alias: {
+			"@": path.resolve(__dirname, "./"),
+		},
 	},
 	test: {
 		projects: [
@@ -54,6 +54,7 @@ export default defineConfig({
 					],
 					include: ["**/*.browser.test.{ts,tsx}"],
 					name: "browser",
+					setupFiles: ["./vitest-browser-setup.ts"],
 					testTimeout: 1000,
 				},
 			},

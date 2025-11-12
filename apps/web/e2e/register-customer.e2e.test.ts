@@ -32,45 +32,26 @@ const test = base.extend<RegisterCustomerPageFixture>({
 	},
 });
 
-test("新規顧客登録ページが正しく表示される", async ({
+test("全フィールドを境界値一杯で入力して顧客を登録し、詳細ページへ遷移する", async ({
 	registerCustomerPage,
 }) => {
-	await test.step("ページタイトルを確認", async () => {
-		await expect(registerCustomerPage.getByText("新規顧客登録")).toBeVisible();
-	});
-
-	await test.step("フォームフィールドが表示されることを確認", async () => {
-		await expect(registerCustomerPage.getByLabel("名前")).toBeVisible();
-		await expect(
-			registerCustomerPage.getByLabel("メールアドレス"),
-		).toBeVisible();
-		await expect(
-			registerCustomerPage.getByLabel("電話番号（任意）"),
-		).toBeVisible();
-		await expect(
-			registerCustomerPage.getByRole("button", { name: "登録する" }),
-		).toBeVisible();
-	});
-});
-
-test("全フィールドを入力して顧客を登録し、詳細ページに遷移する", async ({
-	registerCustomerPage,
-}) => {
-	const uniqueId = Date.now();
+	// 境界値一杯のテストデータ
 	const testData = {
-		email: `e2e-test-${uniqueId}@example.com`,
-		name: `E2Eテスト太郎_${uniqueId}`,
-		phone: "090-1234-5678",
+		// メールアドレス: 254文字（最大値）
+		// ローカル部分64文字 + @ + ドメイン部分189文字 = 254文字
+		email: `${"a".repeat(64)}@${"example-".repeat(22)}example12.com`,
+		// 名前: 24文字（最大値）
+		name: "あいうえおかきくけこさしすせそたちつてとなにぬね",
+		// 電話番号: ハイフン込みで入力（ハイフンを除いて20文字分の数字）
+		phone: "012-3456-7890-123456789",
 	};
 
-	await test.step("フォームに入力", async () => {
+	await test.step("フォームに境界値一杯のデータを入力", async () => {
 		await registerCustomerPage.getByLabel("名前").fill(testData.name);
 		await registerCustomerPage
 			.getByLabel("メールアドレス")
 			.fill(testData.email);
-		await registerCustomerPage
-			.getByLabel("電話番号（任意）")
-			.fill(testData.phone);
+		await registerCustomerPage.getByLabel("電話番号").fill(testData.phone);
 	});
 
 	await test.step("登録ボタンをクリック", async () => {
@@ -84,157 +65,74 @@ test("全フィールドを入力して顧客を登録し、詳細ページに�
 		await expect(registerCustomerPage.getByText("顧客詳細")).toBeVisible();
 	});
 
-	await test.step("登録した情報が表示されることを確認", async () => {
-		await expect(registerCustomerPage.getByText(testData.name)).toBeVisible();
-		await expect(registerCustomerPage.getByText(testData.email)).toBeVisible();
-		await expect(registerCustomerPage.getByText(testData.phone)).toBeVisible();
-	});
-});
+	await test.step("登録した情報が正しく表示されることを確認", async () => {
+		// 名前の確認（font-boldクラスで表示される通常のテキスト）
+		const nameSection = registerCustomerPage
+			.getByText("名前")
+			.locator("..")
+			.locator("..");
+		await expect(nameSection.getByText(testData.name)).toBeVisible();
 
-test("電話番号なしで顧客を登録できる", async ({ registerCustomerPage }) => {
-	const uniqueId = Date.now();
-	const testData = {
-		email: `e2e-test-no-phone-${uniqueId}@example.com`,
-		name: `E2Eテスト花子_${uniqueId}`,
-	};
-
-	await test.step("名前とメールアドレスのみ入力", async () => {
-		await registerCustomerPage.getByLabel("名前").fill(testData.name);
-		await registerCustomerPage
-			.getByLabel("メールアドレス")
-			.fill(testData.email);
-	});
-
-	await test.step("登録ボタンをクリック", async () => {
-		await registerCustomerPage
-			.getByRole("button", { name: "登録する" })
-			.click();
-	});
-
-	await test.step("詳細ページに遷移することを確認", async () => {
-		await registerCustomerPage.waitForURL("**/customers/*");
-		await expect(registerCustomerPage.getByText("顧客詳細")).toBeVisible();
-	});
-
-	await test.step("登録した情報が表示されることを確認", async () => {
-		await expect(registerCustomerPage.getByText(testData.name)).toBeVisible();
-		await expect(registerCustomerPage.getByText(testData.email)).toBeVisible();
-		// 電話番号は表示されない
-		await expect(registerCustomerPage.getByText("電話番号")).not.toBeVisible();
-	});
-});
-
-test("必須フィールドが空の場合、バリデーションエラーが表示される", async ({
-	registerCustomerPage,
-}) => {
-	await test.step("フォームを空のまま送信", async () => {
-		await registerCustomerPage
-			.getByRole("button", { name: "登録する" })
-			.click();
-	});
-
-	await test.step("バリデーションエラーが表示されることを確認", async () => {
-		await expect(
-			registerCustomerPage.getByText("名前を入力してください"),
-		).toBeVisible();
-		await expect(
-			registerCustomerPage.getByText("メールアドレスを入力してください"),
-		).toBeVisible();
-	});
-
-	await test.step("ページ遷移していないことを確認", async () => {
-		expect(registerCustomerPage.url()).toContain("/customers/new");
-	});
-});
-
-test("不正なメールアドレス形式の場合、バリデーションエラーが表示される", async ({
-	registerCustomerPage,
-}) => {
-	await test.step("不正な形式のメールアドレスを入力", async () => {
-		await registerCustomerPage.getByLabel("名前").fill("テスト太郎");
-		await registerCustomerPage
-			.getByLabel("メールアドレス")
-			.fill("invalid-email");
-	});
-
-	await test.step("登録ボタンをクリック", async () => {
-		await registerCustomerPage
-			.getByRole("button", { name: "登録する" })
-			.click();
-	});
-
-	await test.step("バリデーションエラーが表示されることを確認", async () => {
-		await expect(
-			registerCustomerPage.getByText(
-				"正しいメールアドレス形式で入力してください",
-			),
-		).toBeVisible();
-	});
-});
-
-test("既に登録済みのメールアドレスの場合、エラーメッセージが表示される", async ({
-	registerCustomerPage,
-}) => {
-	// seedデータの既存メールアドレスを使用
-	const existingEmail = "test1@example.com";
-
-	await test.step("既存のメールアドレスで登録を試みる", async () => {
-		await registerCustomerPage.getByLabel("名前").fill("重複テスト");
-		await registerCustomerPage.getByLabel("メールアドレス").fill(existingEmail);
-	});
-
-	await test.step("登録ボタンをクリック", async () => {
-		await registerCustomerPage
-			.getByRole("button", { name: "登録する" })
-			.click();
-	});
-
-	await test.step("エラーメッセージが表示されることを確認", async () => {
-		await expect(
-			registerCustomerPage.getByText(
-				"このメールアドレスは既に登録されています",
-			),
-		).toBeVisible();
-	});
-
-	await test.step("ページ遷移していないことを確認", async () => {
-		expect(registerCustomerPage.url()).toContain("/customers/new");
-	});
-});
-
-test("送信中はボタンが無効化され、ローディング表示になる", async ({
-	registerCustomerPage,
-}) => {
-	const uniqueId = Date.now();
-	const testData = {
-		email: `e2e-test-loading-${uniqueId}@example.com`,
-		name: `E2Eテスト_Loading_${uniqueId}`,
-	};
-
-	await test.step("フォームに入力", async () => {
-		await registerCustomerPage.getByLabel("名前").fill(testData.name);
-		await registerCustomerPage
-			.getByLabel("メールアドレス")
-			.fill(testData.email);
-	});
-
-	await test.step("登録ボタンをクリック", async () => {
-		await registerCustomerPage
-			.getByRole("button", { name: "登録する" })
-			.click();
-	});
-
-	await test.step("ローディング状態を確認", async () => {
-		// ローディング中のボタンが表示される
-		const loadingButton = registerCustomerPage.getByRole("button", {
-			name: /登録中/,
+		// メールアドレスの確認（リンクとして表示される）
+		const emailLink = registerCustomerPage.getByRole("link", {
+			name: testData.email,
 		});
-		// ローディングボタンが表示されている間は無効化されている
-		await expect(loadingButton).toBeDisabled();
+		await expect(emailLink).toBeVisible();
+		await expect(emailLink).toHaveAttribute("href", `mailto:${testData.email}`);
+
+		// 電話番号の確認（ハイフンが削除された状態でリンクとして表示される）
+		const expectedPhone = testData.phone.replace(/-/g, "");
+		const phoneLink = registerCustomerPage.getByRole("link", {
+			name: expectedPhone,
+		});
+		await expect(phoneLink).toBeVisible();
+		await expect(phoneLink).toHaveAttribute("href", `tel:${expectedPhone}`);
+
+		// 作成日時と更新日時は medium テストとコンポーネントテストで担保
+	});
+});
+
+test("必須フィールドのみ入力して登録でき、詳細ページへ遷移する", async ({
+	registerCustomerPage,
+}) => {
+	const uniqueId = Date.now();
+	const testData = {
+		name: `必須のみ登録テスト_${uniqueId}`,
+	};
+
+	await test.step("必須フィールド（名前）のみ入力", async () => {
+		await registerCustomerPage.getByLabel("名前").fill(testData.name);
+		// メールアドレスと電話番号は入力しない
 	});
 
-	await test.step("登録完了後、詳細ページに遷移することを確認", async () => {
+	await test.step("登録ボタンをクリック", async () => {
+		await registerCustomerPage
+			.getByRole("button", { name: "登録する" })
+			.click();
+	});
+
+	await test.step("詳細ページに遷移することを確認", async () => {
 		await registerCustomerPage.waitForURL("**/customers/*");
 		await expect(registerCustomerPage.getByText("顧客詳細")).toBeVisible();
+	});
+
+	await test.step("登録した情報が正しく表示されることを確認", async () => {
+		// 名前の確認（font-boldクラスで表示される通常のテキスト）
+		const nameSection = registerCustomerPage
+			.getByText("名前")
+			.locator("..")
+			.locator("..");
+		await expect(nameSection.getByText(testData.name)).toBeVisible();
+
+		// メールアドレスと電話番号は「未登録」と表示される
+		const emailLabel = registerCustomerPage
+			.getByText("メールアドレス")
+			.locator("..");
+		await expect(emailLabel.getByText("未登録")).toBeVisible();
+
+		const phoneLabel = registerCustomerPage.getByText("電話番号").locator("..");
+		await expect(phoneLabel.getByText("未登録")).toBeVisible();
+
+		// 作成日時と更新日時は medium テストとコンポーネントテストで担保
 	});
 });

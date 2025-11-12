@@ -26,7 +26,7 @@ const test = base.extend<{
 	},
 });
 
-test("クライアントサイドバリデーション: 名前が空の場合、エラーが表示される", async () => {
+test("名前が空の場合、エラーが表示される", async () => {
 	render(<EditCustomerForm />);
 
 	// ハイドレーション完了を待つ
@@ -40,7 +40,7 @@ test("クライアントサイドバリデーション: 名前が空の場合、
 		.toBeInTheDocument();
 });
 
-test("クライアントサイドバリデーション: メールアドレスの形式が不正な場合、エラーが表示される", async () => {
+test("メールアドレスの形式が不正な場合、エラーが表示される", async () => {
 	render(<EditCustomerForm />);
 
 	// ハイドレーション完了を待つ
@@ -110,5 +110,65 @@ test("登録エラー時にエラーメッセージが表示される", async ({
 				"サーバーエラーが発生しました。時間をおいて再度お試しください",
 			),
 		)
+		.toBeInTheDocument();
+});
+
+test("名前が25文字（最大値24文字を超える）場合、エラーが表示される", async () => {
+	render(<EditCustomerForm />);
+
+	// ハイドレーション完了を待つ
+	await expect.element(page.getByLabelText("名前")).not.toBeDisabled();
+
+	// 25文字の名前を入力
+	await page
+		.getByLabelText("名前")
+		.fill("あいうえおかきくけこさしすせそたちつてとなにぬねのは");
+
+	// 送信ボタンをクリック
+	await page.getByRole("button", { name: "登録する" }).click();
+
+	// バリデーションエラーが表示されることを確認
+	await expect
+		.element(page.getByText("名前は24文字以内で入力してください"))
+		.toBeInTheDocument();
+});
+
+test("メールアドレスが255文字（最大値254文字を超える）場合、エラーが表示される", async () => {
+	render(<EditCustomerForm />);
+
+	// ハイドレーション完了を待つ
+	await expect.element(page.getByLabelText("名前")).not.toBeDisabled();
+
+	// 255文字のメールアドレスを入力（ローカル部分64文字 + @ + ドメイン部分190文字 = 255文字）
+
+	const longEmail = `${"a".repeat(64)}@${"example-".repeat(22)}example123.com`;
+	await page.getByLabelText("名前").fill("テスト太郎");
+	await page.getByLabelText("メールアドレス").fill(longEmail);
+
+	// 送信ボタンをクリック
+	await page.getByRole("button", { name: "登録する" }).click();
+
+	// バリデーションエラーが表示されることを確認
+	await expect
+		.element(page.getByText("メールアドレスは254文字以内で入力してください"))
+		.toBeInTheDocument();
+});
+
+test("電話番号が21文字（最大値20文字を超える）場合、エラーが表示される", async () => {
+	render(<EditCustomerForm />);
+
+	// ハイドレーション完了を待つ
+	await expect.element(page.getByLabelText("名前")).not.toBeDisabled();
+
+	// 21文字の電話番号を入力（ハイフン込みで入力し、ハイフン除去後に21文字になる）
+	await page.getByLabelText("名前").fill("テスト太郎");
+	await page.getByLabelText("電話番号").fill("012-3456-7890-1234567890");
+
+	// 送信ボタンをクリック
+	await page.getByRole("button", { name: "登録する" }).click();
+
+	// バリデーションエラーが表示されることを確認
+	await expect
+		.element(page.getByText("電話番号は20文字以内で入力してください"))
 		.toBeInTheDocument();
 });

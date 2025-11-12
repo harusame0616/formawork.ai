@@ -1,7 +1,8 @@
+import type { SelectCustomer } from "@workspace/db/schema/customer";
 import { expect, test, vi } from "vitest";
 import { page } from "vitest/browser";
 import { render } from "vitest-browser-react";
-
+import { CustomersPresenter } from "./customers-presenter";
 
 vi.mock("next/navigation", () => ({
 	usePathname: vi.fn().mockReturnValue("path"),
@@ -10,9 +11,6 @@ vi.mock("next/navigation", () => ({
 	}),
 	useSearchParams: vi.fn().mockReturnValue(new URLSearchParams()),
 }));
-
-import type { SelectCustomer } from "@workspace/db/schema/customer";
-import { CustomersPresenter } from "./customers-presenter";
 
 const mockCustomers: SelectCustomer[] = [
 	{
@@ -66,12 +64,26 @@ test("ページネーションが表示される", async () => {
 	await expect.element(paginationElement).toBeInTheDocument();
 });
 
-test("ページネーションが1ページのみの場合表示されない", async () => {
+test("ページネーションが1ページのみの場合全てのボタンがdisabled", async () => {
 	render(
 		<CustomersPresenter customers={mockCustomers} page={1} totalPages={1} />,
 	);
 
-	// 1ページのみの場合、SearchPaginationは表示されない
+	// 1ページのみの場合、全てのボタンがdisabledになる
 	const paginationElement = page.getByRole("navigation");
-	await expect.element(paginationElement).not.toBeInTheDocument();
+	await expect.element(paginationElement).toBeInTheDocument();
+
+	// 前へボタンがdisabled
+	const previousButton = page.getByRole("link", { name: "前へ" });
+	await expect.element(previousButton).toHaveAttribute("aria-disabled", "true");
+
+	// ページ番号ボタンがdisabled（aria-current="page"で現在ページを特定）
+	const pageButton = page.getByRole("link", {
+		name: /^1$/,
+	});
+	await expect.element(pageButton).toHaveAttribute("aria-disabled", "true");
+
+	// 次へボタンがdisabled
+	const nextButton = page.getByRole("link", { name: "次へ" });
+	await expect.element(nextButton).toHaveAttribute("aria-disabled", "true");
 });
