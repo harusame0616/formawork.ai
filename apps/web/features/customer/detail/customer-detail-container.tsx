@@ -9,11 +9,20 @@ type CustomerDetailContainerProps = {
 export async function CustomerDetailContainer({
 	customerIdPromise,
 }: CustomerDetailContainerProps) {
-	const customer = await getCustomerDetail(await customerIdPromise);
+	try {
+		const customer = await getCustomerDetail(await customerIdPromise);
 
-	if (!customer) {
-		notFound();
+		if (!customer) {
+			notFound();
+		}
+
+		return <CustomerDetailPresenter customer={customer} />;
+	} catch (_e) {
+		// デバッグのためエラー内容出力
+		return (
+			<div>
+				データ取得でエラーが発生しました<div> {JSON.stringify(_e)}</div>
+			</div>
+		);
 	}
-
-	return <CustomerDetailPresenter customer={customer} />;
 }
