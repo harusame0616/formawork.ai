@@ -1,6 +1,7 @@
 "use server";
 
 import { fail, type Result } from "@harusame0616/result";
+import { EventType } from "@repo/logger/event-types";
 import { getLogger } from "@repo/logger/nextjs/server";
 import { db } from "@workspace/db/client";
 import { customersTable } from "@workspace/db/schema/customer";
@@ -9,7 +10,7 @@ import { redirect } from "next/navigation";
 import * as v from "valibot";
 import { generateUniqueId } from "../../../libs/generate-unique-id";
 import { type RegisterCustomerInput, registerCustomerSchema } from "../schema";
-import { CustomerTag } from "../tag";
+import { CustomerTag, tagByCustomerId } from "../tag";
 
 const INVALID_INPUT_ERROR_MESSAGE = "入力内容に誤りがあります" as const;
 const INTERNAL_SERVER_ERROR_MESSAGE =
@@ -23,11 +24,17 @@ export async function registerCustomerAction(
 	params: RegisterCustomerInput,
 ): Promise<Result<never, RegisterCustomerActionErrorMessage>> {
 	const logger = await getLogger("registerCustomerAction");
+	logger.info("execute registerCustomerAction", {
+		params,
+	});
 
 	// バリデーション
 	const paramsParseResult = v.safeParse(registerCustomerSchema, params);
 	if (!paramsParseResult.success) {
-		logger.warn("Validation failed", { issues: paramsParseResult.issues });
+		logger.warn("Validation failed", {
+			event: EventType.InputValidationError,
+			issues: paramsParseResult.issues,
+		});
 		return fail(INVALID_INPUT_ERROR_MESSAGE);
 	}
 
@@ -50,6 +57,7 @@ export async function registerCustomerAction(
 		});
 
 		updateTag(CustomerTag.crud);
+		updateTag(tagByCustomerId(customerId));
 	} catch (error) {
 		logger.error("Failed to register customer", {
 			action: "register-customer",
