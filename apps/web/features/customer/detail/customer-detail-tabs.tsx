@@ -1,5 +1,6 @@
 "use client";
 
+import { Tabs, TabsList, TabsTrigger } from "@workspace/ui/components/tabs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { use } from "react";
@@ -18,33 +19,32 @@ export function CustomerDetailTabs({
 		{
 			href: `/customers/${customerId}/basic`,
 			label: "基本情報",
+			value: "basic",
 		},
 		{
 			href: `/customers/${customerId}/reports`,
 			label: "レポート",
+			value: "reports",
 		},
 	] as const;
 
+	const activeTab =
+		tabs.find((tab) => pathname === tab.href)?.value ?? tabs[0].value;
+
 	return (
-		<div className="border-b">
-			<nav className="flex space-x-8">
-				{tabs.map((tab) => {
-					const isActive = pathname === tab.href;
-					return (
+		<Tabs className="w-full" value={activeTab}>
+			<TabsList className="grid grid-cols-2 bg-muted-foreground/10 w-full">
+				{tabs.map((tab) => (
+					<TabsTrigger asChild key={tab.value} value={tab.value}>
 						<Link
-							className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-								isActive
-									? "border-primary text-primary"
-									: "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
-							}`}
+							aria-current={activeTab === tab.value ? "page" : undefined}
 							href={tab.href}
-							key={tab.href}
 						>
 							{tab.label}
 						</Link>
-					);
-				})}
-			</nav>
-		</div>
+					</TabsTrigger>
+				))}
+			</TabsList>
+		</Tabs>
 	);
 }

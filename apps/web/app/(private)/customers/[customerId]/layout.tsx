@@ -11,18 +11,16 @@ export default async function CustomerDetailLayout({
 	const customerIdPromise = params.then(({ customerId }) => customerId);
 
 	return (
-		<div className="container mx-auto">
-			<div className="p-4">
-				<Suspense fallback={<CustomerInfoSkeleton />}>
-					<CustomerInfoContainer customerIdPromise={customerIdPromise} />
-				</Suspense>
-			</div>
+		<div className="container mx-auto p-4 space-y-4">
+			<Suspense fallback={<CustomerInfoSkeleton />}>
+				<CustomerInfoContainer customerIdPromise={customerIdPromise} />
+			</Suspense>
 
 			<Suspense fallback={<CustomerDetailTabsSkeleton />}>
 				<CustomerDetailTabs customerIdPromise={customerIdPromise} />
 			</Suspense>
 
-			<div className="p-4">{children}</div>
+			{children}
 		</div>
 	);
 }
