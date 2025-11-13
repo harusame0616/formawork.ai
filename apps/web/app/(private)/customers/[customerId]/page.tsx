@@ -1,21 +1,8 @@
-import { Card } from "@workspace/ui/components/card";
-import { Suspense } from "react";
-import { CustomerDetailContainer } from "../../../../features/customer/detail/customer-detail-container";
-import { CustomerDetailSkeleton } from "../../../../features/customer/detail/customer-detail-skeleton";
+import { redirect } from "next/navigation";
 
-export default function CustomerDetailPage(
-	props: PageProps<"/customers/[customerId]">,
-) {
-	const customerIdPromise = props.params.then((p) => p.customerId);
-
-	return (
-		<div className="container mx-auto p-2 space-y-4">
-			<h1 className="font-bold">顧客詳細</h1>
-			<Card className="p-4 w-full">
-				<Suspense fallback={<CustomerDetailSkeleton />}>
-					<CustomerDetailContainer customerIdPromise={customerIdPromise} />
-				</Suspense>
-			</Card>
-		</div>
-	);
+export default async function CustomerDetailPage({
+	params,
+}: PageProps<"/customers/[customerId]">) {
+	const customerId = await params.then(({ customerId }) => customerId);
+	redirect(`/customers/${customerId}/basic`);
 }

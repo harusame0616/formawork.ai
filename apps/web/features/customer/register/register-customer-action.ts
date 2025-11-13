@@ -67,5 +67,5 @@ export async function registerCustomerAction(
 	}
 
 	// 顧客詳細ページへリダイレクト
-	redirect(`/customers/${customerId}`);
+	redirect(`/customers/${customerId}/basic`);
 }
