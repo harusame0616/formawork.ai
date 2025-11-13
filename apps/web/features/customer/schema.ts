@@ -40,7 +40,6 @@ export const registerCustomerSchema = v.object({
 		),
 	]),
 	name: v.union([
-		v.literal(""),
 		v.pipe(
 			v.string("名前を入力してください"),
 			v.minLength(1, "名前を入力してください"),
