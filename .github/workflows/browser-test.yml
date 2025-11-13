@@ -45,7 +45,7 @@ jobs:
         run: pnpm --filter web exec playwright install --with-deps chromium
 
         # 初回実行時に必ず new dependencies optimized: が発生しエラーが出るため一回目はエラーで落とす前提（暫定対策）
-      - name: ブラウザテストの実行
+      - name: "エラー対策：[vitest] Vite unexpectedly reloaded a test"
         run: pnpm test:browser
         continue-on-error: true
 
