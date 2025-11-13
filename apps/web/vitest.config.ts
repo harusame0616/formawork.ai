@@ -1,42 +1,19 @@
 import path from "node:path";
 import react from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
-import { defineConfig } from "vitest/config";
+import { defineProject } from "vitest/config";
 
-export default defineConfig({
+export default defineProject({
 	plugins: [react()],
 	resolve: {
 		alias: {
 			"@": path.resolve(__dirname, "./"),
 		},
+		dedupe: ["react", "react-dom"],
 	},
 	test: {
 		projects: [
 			{
-				define: {
-					"process.env": {},
-				},
-				optimizeDeps: {
-					// 以下のエラー対策	（cspell:disable-next-line）
-					// [vitest] Vite unexpectedly reloaded a test. This may cause tests to fail, lead to flaky behaviour or duplicated test runs.
-					// For a stable experience, please add mentioned dependencies to your config's `optimizeDeps.include` field manually.
-					include: [
-						"react/jsx-dev-runtime",
-						"vitest-browser-react",
-						"next/navigation",
-						"next/link",
-						"lucide-react",
-						"react",
-						"valibot",
-						"@hookform/resolvers/valibot",
-						"react-hook-form",
-						"@radix-ui/react-slot",
-						"@radix-ui/react-dialog",
-						"class-variance-authority",
-						"clsx",
-						"tailwind-merge",
-					],
-				},
 				test: {
 					browser: {
 						enabled: true,
@@ -56,6 +33,7 @@ export default defineConfig({
 					],
 					include: ["**/*.browser.test.{ts,tsx}"],
 					name: "browser",
+					setupFiles: ["./vitest-browser-setup.ts"],
 					testTimeout: 1000,
 				},
 			},

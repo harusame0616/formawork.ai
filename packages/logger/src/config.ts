@@ -4,7 +4,7 @@ import type { LoggerConfig } from "./types";
 export function getLoggerConfig(): LoggerConfig {
 	return v.parse(
 		v.object({
-			application: v.string(),
+			application: v.string("アプリケーション名は必須です"),
 			environment: v.optional(
 				v.picklist(["development", "staging", "production"]),
 				"development",
@@ -21,7 +21,7 @@ export function getLoggerConfig(): LoggerConfig {
 				]),
 				"info",
 			),
-			service: v.string(),
+			service: v.string("サービス名は必須です"),
 		}),
 		{
 			// biome-ignore lint/complexity/useLiteralKeys: ts(4111)

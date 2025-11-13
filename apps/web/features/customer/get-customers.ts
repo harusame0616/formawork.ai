@@ -8,6 +8,7 @@ import {
 	CUSTOMER_SEARCH_KEYWORD_MAX_LENGTH,
 	type CustomerSearchConditionInput,
 } from "./schema";
+import { CustomerTag } from "./tag";
 
 type GetCustomersResult = {
 	customers: SelectCustomer[];
@@ -26,9 +27,8 @@ export async function getCustomers(
 	params: CustomerSearchConditionInput,
 ): Promise<GetCustomersResult> {
 	"use cache";
-
 	cacheLife("permanent");
-	cacheTag("customer-crud");
+	cacheTag(CustomerTag.crud);
 
 	const { keyword, page } = v.parse(getCustomersParamsSchema, params);
 	const pageSize = 20;

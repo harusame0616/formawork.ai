@@ -8,6 +8,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@workspace/ui/components/table";
+import Link from "next/link";
 
 type CustomersPresenterProps = {
 	customers: SelectCustomer[];
@@ -43,7 +44,14 @@ export function CustomersPresenter({
 				<TableBody>
 					{customers.map((customer) => (
 						<TableRow key={customer.customerId}>
-							<TableCell>{customer.name}</TableCell>
+							<TableCell>
+								<Link
+									className="text-primary underline"
+									href={`/customers/${customer.customerId}`}
+								>
+									{customer.name}
+								</Link>
+							</TableCell>
 							<TableCell>{customer.email}</TableCell>
 							<TableCell>{customer.phone || "-"}</TableCell>
 						</TableRow>

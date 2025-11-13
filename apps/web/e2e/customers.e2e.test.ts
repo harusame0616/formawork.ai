@@ -26,6 +26,9 @@ const test = base.extend<CustomersPageFixture>({
 		// 顧客一覧ページに遷移
 		await authenticatedPage.goto("/customers");
 		await authenticatedPage.waitForURL("/customers");
+		await expect(
+			authenticatedPage.getByRole("main").getByText("読み込み中"),
+		).toBeHidden();
 
 		await use(authenticatedPage);
 	},
@@ -43,13 +46,8 @@ test("メニューから顧客一覧ページに遷移できる", async ({
 }) => {
 	await test.step("メニューボタンをクリックしてメニューを開く", async () => {
 		await authenticatedPage
-			.getByRole("button", { name: "メニューを開く" })
-			.first()
+			.getByRole("button", { name: /^メニューを開く$/ })
 			.click();
-		// メニュー内の顧客一覧リンクが表示されることを確認
-		await expect(
-			authenticatedPage.getByRole("link", { name: "顧客一覧" }),
-		).toBeVisible();
 	});
 
 	await test.step("顧客一覧リンクをクリック", async () => {
@@ -64,40 +62,22 @@ test("メニューから顧客一覧ページに遷移できる", async ({
 	});
 });
 
-test("顧客一覧ページが正しく表示される", async ({ customersPage }) => {
-	await test.step("顧客一覧が表示されることを確認", async () => {
-		// CardTitleはdiv要素なのでgetByTextを使用
-		await expect(customersPage.getByText("顧客一覧")).toBeVisible();
-		// 1ページ目に20件表示されることを確認
-		const rows = customersPage.locator("table tbody tr");
-		await expect(rows).toHaveCount(20);
-	});
-
-	await test.step("検索フォームが表示されることを確認", async () => {
-		await expect(customersPage.getByLabel("検索キーワード")).toBeVisible();
-		await expect(
-			customersPage.getByRole("button", { name: "検索" }),
-		).toBeVisible();
-	});
-});
-
 test("名前で検索できる", async ({ customersPage }) => {
 	const searchKeyword = "太郎";
 
-	await test.step("検索キーワードを入力", async () => {
+	await test.step("名前を入力して検索", async () => {
 		await customersPage.getByLabel("検索キーワード").fill(searchKeyword);
-	});
-
-	await test.step("検索ボタンをクリック", async () => {
 		await customersPage.getByRole("button", { name: "検索" }).click();
 		await customersPage.waitForURL("**/customers?keyword=*");
+		await expect(
+			customersPage.getByRole("main").getByText("読み込み中"),
+		).toBeHidden();
 	});
 
 	await test.step("検索結果を確認", async () => {
 		// 表示されている全てのデータが検索キーワードを含んでいることを確認
 		const rows = customersPage.locator("table tbody tr");
 		const count = await rows.count();
-
 		for (let i = 0; i < count; i++) {
 			const row = rows.nth(i);
 			const text = await row.textContent();
@@ -113,13 +93,15 @@ test("メールアドレスで検索できる", async ({ customersPage }) => {
 		await customersPage.getByLabel("検索キーワード").fill(searchKeyword);
 		await customersPage.getByRole("button", { name: "検索" }).click();
 		await customersPage.waitForURL("**/customers?keyword=*");
+		await expect(
+			customersPage.getByRole("main").getByText("読み込み中"),
+		).toBeHidden();
 	});
 
 	await test.step("検索結果を確認", async () => {
 		// 表示されている全てのデータが検索キーワードを含んでいることを確認
 		const rows = customersPage.locator("table tbody tr");
 		const count = await rows.count();
-
 		for (let i = 0; i < count; i++) {
 			const row = rows.nth(i);
 			const text = await row.textContent();
@@ -135,13 +117,15 @@ test("電話番号で検索できる", async ({ customersPage }) => {
 		await customersPage.getByLabel("検索キーワード").fill(searchKeyword);
 		await customersPage.getByRole("button", { name: "検索" }).click();
 		await customersPage.waitForURL("**/customers?keyword=*");
+		await expect(
+			customersPage.getByRole("main").getByText("読み込み中"),
+		).toBeHidden();
 	});
 
 	await test.step("検索結果を確認", async () => {
 		// 表示されている全てのデータが検索キーワードを含んでいることを確認
 		const rows = customersPage.locator("table tbody tr");
 		const count = await rows.count();
-
 		for (let i = 0; i < count; i++) {
 			const row = rows.nth(i);
 			const text = await row.textContent();
@@ -157,6 +141,9 @@ test("該当する顧客がいない場合、メッセージが表示される",
 		await customersPage.getByLabel("検索キーワード").fill("存在しない顧客");
 		await customersPage.getByRole("button", { name: "検索" }).click();
 		await customersPage.waitForURL("**/customers?keyword=*");
+		await expect(
+			customersPage.getByRole("main").getByText("読み込み中"),
+		).toBeHidden();
 	});
 
 	await test.step("メッセージを確認", async () => {
@@ -168,20 +155,22 @@ test("該当する顧客がいない場合、メッセージが表示される",
 
 test("ページネーションが正しく動作する", async ({ customersPage }) => {
 	await test.step("1ページ目に20件表示されることを確認", async () => {
-		// seedデータは25件なので、1ページ目に20件表示される
+		await expect(
+			customersPage.getByRole("main").getByText("読み込み中"),
+		).toBeHidden();
+		// seedデータは20件以上あるため、他のテストで変更があったとしても 20 件はあることを前提とする
 		const rows = customersPage.locator("table tbody tr");
 		await expect(rows).toHaveCount(20);
 	});
 
-	await test.step("ページネーションリンクをクリック", async () => {
-		await customersPage.getByRole("link", { name: "2" }).click();
-		await customersPage.waitForURL("**/customers?page=2");
+	await test.step("2ページ目をクリック", async () => {
+		await customersPage.getByRole("link", { name: /^2$/ }).click();
 	});
 
-	await test.step("2ページ目に残りのデータが表示されることを確認", async () => {
-		// seedデータは25件なので、2ページ目に5件表示される
-		const rows = customersPage.locator("table tbody tr");
-		await expect(rows).toHaveCount(5);
+	await test.step("2ページ目に遷移することを確認", async () => {
+		// データは作成系のテストによって変わってしまうので URL が正しいことのみチェック
+		// 正しいデータが取得できるかは server の medium テストで担保
+		await expect(customersPage).toHaveURL("/customers?page=2");
 	});
 
 	await test.step("「前へ」ボタンで1ページ目に戻れることを確認", async () => {
@@ -206,13 +195,14 @@ test("検索とページネーションを組み合わせて使用できる", as
 
 	await test.step("1ページ目の検索結果を確認", async () => {
 		// Skeletonではなく実際のデータが表示されるまで待つ
-		// (Skeletonは5行、実データは20行なので行数で判定)
-		const rows = customersPage.locator("table tbody tr");
-		await expect(rows).toHaveCount(20);
+		await expect(
+			customersPage.getByRole("main").getByText("読み込み中"),
+		).toBeHidden();
 
 		// 表示されている全てのデータが検索キーワードを含んでいることを確認
-		const count = await rows.count();
-		for (let i = 0; i < count; i++) {
+		const rows = customersPage.locator("table tbody tr");
+		await expect(rows).toHaveCount(20);
+		for (let i = 0; i < 20; i++) {
 			const row = rows.nth(i);
 			const text = await row.textContent();
 			expect(text).toContain(searchKeyword);
@@ -220,17 +210,18 @@ test("検索とページネーションを組み合わせて使用できる", as
 	});
 
 	await test.step("検索結果の2ページ目に遷移", async () => {
-		await customersPage.getByRole("link", { name: "2" }).click();
-		await customersPage.waitForURL("**/customers?keyword=*&page=2");
+		await customersPage.getByRole("link", { name: /^2$/ }).click();
+		await customersPage.waitForURL("/customers?keyword=example.com&page=2");
 	});
 
 	await test.step("2ページ目の検索結果を確認", async () => {
 		// Skeletonではなく実際のデータが表示されるまで待つ
-		// (2ページ目は5行)
-		const rows = customersPage.locator("table tbody tr");
-		await expect(rows).toHaveCount(5);
+		await expect(
+			customersPage.getByRole("main").getByText("読み込み中"),
+		).toBeHidden();
 
 		// 表示されている全てのデータが検索キーワードを含んでいることを確認
+		const rows = customersPage.locator("table tbody tr");
 		const count = await rows.count();
 		for (let i = 0; i < count; i++) {
 			const row = rows.nth(i);
