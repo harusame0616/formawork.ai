@@ -45,7 +45,7 @@ jobs:
         run: pnpm --filter web exec playwright install --with-deps chromium
 
       - name: ブラウザテストの実行
-        run: pnpm test:browser
+        run: cd apps/web && pnpm test:browser
 
       - name: テスト結果のアップロード
         if: failure()
