@@ -139,6 +139,33 @@ Page と Layout では Next.js が提供する型ヘルパーを使用するこ�
 - `children` と `params` が型安全になる
 - グローバルに利用可能でインポート不要
 
+**params と searchParams の扱い:**
+
+- Page/Layout で `params` や `searchParams` を `await` すると、そのコンポーネントが Dynamic になってしまう
+- **必要がなければ** `await` を避け、`.then()` で変換して子コンポーネントに Promise として渡すこと
+- `.then()` 内でデストラクチャリングを使用してシンプルに記述すること
+- `searchParams` は `.then()` 内で必ず valibot でパースすること（型の保証だけでは不十分）
+- クライアントコンポーネントなど、値が必要な場合は `await` して使用すること（この場合は Dynamic になることを理解する）
+- 不要な省略や中間変数は避け、シンプルでわかりやすいコードを優先すること
+
+```tsx
+// params の例
+async function Page({ params }: PageProps<"/customers/[customerId]">) {
+  const customerIdPromise = params.then(({ customerId }) => customerId);
+  return <CustomerContainer customerIdPromise={customerIdPromise} />;
+}
+
+// searchParams の例
+const customerSearchCondition = v.object({ hoo: v.optional(v.string(), v.transform(number)) });
+
+async function Page({ searchParams }: PageProps<"/customers">) {
+  const parsedSearchParamsPromise = searchParams.then((searchParams) =>
+    parse(searchParamsSchema, searchParams)
+  );
+  return <Customers condition={customerSearchCondition} />;
+}
+
+
 ### ハイドレーション対応
 
 クライアントコンポーネントでフォームやコントロールを使用する際は、ハイドレーション完了前の操作に対処すること。

@@ -10,7 +10,7 @@ type Customer = {
 	updatedAt: Date;
 };
 
-type CustomerDetailPresenterProps = {
+type CustomerBasicInfoPresenterProps = {
 	customer: Customer;
 };
 
@@ -19,14 +19,10 @@ type CustomerField = {
 	value: ReactNode;
 };
 
-export function CustomerDetailPresenter({
+export function CustomerBasicInfoPresenter({
 	customer,
-}: CustomerDetailPresenterProps) {
+}: CustomerBasicInfoPresenterProps) {
 	const fields: CustomerField[] = [
-		{
-			label: "名前",
-			value: customer.name,
-		},
 		{
 			label: "メールアドレス",
 			value: customer.email ? (

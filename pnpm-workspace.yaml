@@ -46,6 +46,7 @@ catalog:
   tsx: 4.20.6
   uuid: ^13.0.0
   '@types/uuid': ^11.0.0
+  '@radix-ui/react-tabs': ^1.1.13
 
 catalogMode: strict
 
