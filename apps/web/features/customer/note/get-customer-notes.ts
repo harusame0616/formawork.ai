@@ -20,7 +20,7 @@ import {
 	type SQL,
 	sql,
 } from "drizzle-orm";
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 
 export type CustomerNoteSearchCondition = {
 	customerId: string;
@@ -46,6 +46,7 @@ export async function getCustomerNotes(
 	totalPages: number;
 }> {
 	cacheTag("customer-notes");
+	cacheLife("permanent");
 
 	const page = condition.page ?? 1;
 	const offset = (page - 1) * NOTES_PER_PAGE;
