@@ -45,7 +45,6 @@ export function CustomerNotesSearchForm(props: CustomerNotesSearchFormProps) {
 	const router = useRouter();
 	const [isOpen, setIsOpen] = useState(false);
 
-	// conditionPromise から初期値を取得
 	const condition = props.disabled
 		? { dateFrom: "", dateTo: "", keyword: "" }
 		: use(props.condition);
@@ -75,7 +74,6 @@ export function CustomerNotesSearchForm(props: CustomerNotesSearchFormProps) {
 		if (values.keyword) params.set("keyword", values.keyword);
 
 		router.push(`?${params.toString()}`);
-		// setIsOpen(false);
 	}
 
 	function handleReset() {
@@ -84,8 +82,6 @@ export function CustomerNotesSearchForm(props: CustomerNotesSearchFormProps) {
 			dateTo: "",
 			keyword: "",
 		});
-		const pathname = window.location.pathname;
-		router.push(pathname as never);
 	}
 
 	const isDisabled = props.disabled === true;
@@ -118,7 +114,6 @@ export function CustomerNotesSearchForm(props: CustomerNotesSearchFormProps) {
 								onSubmit={form.handleSubmit(onSubmit)}
 							>
 								<div className="grid md:grid-cols-2 gap-4">
-									{/* キーワード検索 */}
 									<FormField
 										control={form.control}
 										name="keyword"
@@ -133,13 +128,12 @@ export function CustomerNotesSearchForm(props: CustomerNotesSearchFormProps) {
 										)}
 									/>
 
-									{/* 日付範囲 */}
 									<div className="flex gap-4 flex-wrap">
 										<FormField
 											control={form.control}
 											name="dateFrom"
 											render={({ field }) => (
-												<FormItem>
+												<FormItem className="flex-1">
 													<FormLabel>記入日（開始）</FormLabel>
 													<FormDescription>入力日以降</FormDescription>
 													<FormControl>
@@ -156,7 +150,7 @@ export function CustomerNotesSearchForm(props: CustomerNotesSearchFormProps) {
 											control={form.control}
 											name="dateTo"
 											render={({ field }) => (
-												<FormItem>
+												<FormItem className="flex-1">
 													<FormLabel>記入日（終了）</FormLabel>
 													<FormDescription>入力日より前</FormDescription>
 													<FormControl>
@@ -172,15 +166,16 @@ export function CustomerNotesSearchForm(props: CustomerNotesSearchFormProps) {
 									</div>
 								</div>
 
-								<div className="flex gap-2">
+								<div className="flex gap-2 flex-wrap">
 									<Button
-										className="flex-1"
+										className="min-w-[120px]"
 										disabled={isDisabled}
 										type="submit"
 									>
 										検索
 									</Button>
 									<Button
+										className="min-w-[120px]"
 										disabled={isDisabled}
 										onClick={handleReset}
 										type="button"
