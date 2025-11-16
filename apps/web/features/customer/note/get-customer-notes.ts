@@ -21,6 +21,7 @@ import {
 	sql,
 } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
+import { CustomerTag } from "../tag";
 
 export type CustomerNoteSearchCondition = {
 	customerId: string;
@@ -45,13 +46,12 @@ export async function getCustomerNotes(
 	currentPage: number;
 	totalPages: number;
 }> {
-	cacheTag("customer-notes");
+	cacheTag(CustomerTag.NoteCrud(condition.customerId));
 	cacheLife("permanent");
 
 	const page = condition.page ?? 1;
 	const offset = (page - 1) * NOTES_PER_PAGE;
 
-	// フィルタ条件を構築
 	const filters = [eq(customerNotesTable.customerId, condition.customerId)];
 
 	if (condition.dateFrom) {
@@ -62,21 +62,15 @@ export async function getCustomerNotes(
 		filters.push(lt(customerNotesTable.createdAt, condition.dateTo));
 	}
 
-	// キーワード検索（本文 OR 記入者の名前）
 	if (condition.keyword) {
-		// JOINしたstaffsテーブルで直接検索（事前クエリ不要）
-		// 2つの引数を渡しているためundefinedにはならない
 		const keywordFilter = or(
-			// 本文検索
 			ilike(customerNotesTable.content, `%${condition.keyword}%`),
-			// スタッフ名検索
 			ilike(staffsTable.name, `%${condition.keyword}%`),
 		) as SQL<unknown>;
 
 		filters.push(keywordFilter);
 	}
 
-	// ノート、スタッフ情報、画像を一括取得（LEFT JOIN + json_agg）
 	const notesWithImages = await db
 		.select({
 			content: customerNotesTable.content,
