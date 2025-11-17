@@ -28,6 +28,7 @@ import { useRouter } from "next/navigation";
 import { use, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as v from "valibot";
+import { useIsHydrated } from "../../../libs/use-is-hydrated";
 
 const searchFormSchema = v.object({
 	dateFrom: v.optional(v.string()),
@@ -44,6 +45,7 @@ type CustomerNotesSearchFormProps =
 export function CustomerNotesSearchForm(props: CustomerNotesSearchFormProps) {
 	const router = useRouter();
 	const [isOpen, setIsOpen] = useState(false);
+	const { isHydrated } = useIsHydrated();
 
 	const condition = props.disabled
 		? { dateFrom: "", dateTo: "", keyword: "" }
@@ -84,7 +86,7 @@ export function CustomerNotesSearchForm(props: CustomerNotesSearchFormProps) {
 		});
 	}
 
-	const isDisabled = props.disabled === true;
+	const isDisabled = props.disabled || isHydrated;
 
 	return (
 		<Collapsible disabled={isDisabled} onOpenChange={setIsOpen} open={isOpen}>
