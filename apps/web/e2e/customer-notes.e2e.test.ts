@@ -2,8 +2,6 @@ import { test as base, expect, type Page } from "@playwright/test";
 
 type CustomerNotesPageFixture = {
 	customerNotesPage: Page;
-	testUser: { email: string; password: string };
-	testCustomerId: string;
 };
 
 const test = base.extend<CustomerNotesPageFixture>({
