@@ -1,25 +1,23 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
+/**
+ * ハイドレーション完了を検知するためのフック
+ *
+ * useSyncExternalStoreを使用する理由:
+ * - サーバーとクライアントで異なる値を安全に扱える設計
+ * - React 18以降でハイドレーション状態を扱う推奨パターン
+ * - StrictModeでの安定性が高い
+ * - 値が変更されない外部状態(ブラウザ環境)の場合、空のsubscribe関数は正当な使用法
+ */
 export function useIsHydrated() {
-	const [isHydrated, setIsHydrated] = useState(false);
-
-	/**
-	 * ハイドレーション完了を検知するためのEffect
-	 *
-	 * 検討した代替案: useSyncExternalStore
-	 * - useSyncExternalStoreは外部ストアとの同期が本来の目的であり、
-	 *   subscribeすべき外部の変更源が存在しない今回のケースでは設計思想に反する
-	 * - useEffectは厳密には副作用用だが、「クライアント側でのみ実行」という目的で
-	 *   使用するのはReactコミュニティで広く受け入れられているパターン
-	 *
-	 * 最終決定: useEffectを採用
-	 * - コードの意図が明確で保守しやすい
-	 * - 空のsubscribe関数を渡すAPIの誤用を避けられる
-	 * - パフォーマンス差(1回の再レンダー)は実用上無視できる
-	 */
-	useEffect(() => {
-		setIsHydrated(true);
-	}, []);
+	const isHydrated = useSyncExternalStore(
+		// subscribe: 値が変更されないため空の関数を返す
+		() => () => {},
+		// getSnapshot: クライアント側では常にtrue
+		() => true,
+		// getServerSnapshot: サーバー側では常にfalse
+		() => false,
+	);
 
 	return { isHydrated };
 }

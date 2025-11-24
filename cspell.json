@@ -5,7 +5,8 @@
 		"pnpm-lock.yaml",
 		"packages/supabase/config.toml",
 		"**/playwright-report/**",
-		"packages/db/drizzle/meta/_journal.json"
+		"packages/db/drizzle/meta/_journal.json",
+		"**/test-results/**"
 	],
 	"language": "en",
 	"version": "0.2",
