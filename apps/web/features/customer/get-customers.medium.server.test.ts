@@ -24,7 +24,7 @@ const test = base.extend<{
 		const customer = {
 			customerId: v4(),
 			email: `${v4()}@example.com`,
-			name: v4(),
+			name: v4().slice(0, 24),
 			phone: `${Math.floor(Math.random() * 1000000000)}`,
 		};
 
