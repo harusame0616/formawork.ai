@@ -30,9 +30,9 @@ test("顧客情報を編集できる", async ({ page }) => {
 
 	await test.step("顧客情報を編集", async () => {
 		// フォームが表示されることを確認
-		await expect(page.getByLabel("顧客名")).toBeVisible();
+		await expect(page.getByLabel("名前")).toBeVisible();
 
-		await page.getByLabel("顧客名").fill("編集太郎");
+		await page.getByLabel("名前").fill("編集太郎");
 		await page.getByLabel("メールアドレス").fill("edited@example.com");
 		await page.getByLabel("電話番号").fill("090-0000-0000");
 
