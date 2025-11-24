@@ -18,8 +18,8 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { editCustomerAction } from "@/features/customer/edit/edit-customer-action";
 import { useIsHydrated } from "../../../libs/use-is-hydrated";
-import { editCustomerAction } from "../edit/edit-customer-action";
 import { type RegisterCustomerInput, registerCustomerSchema } from "../schema";
 import { registerCustomerAction } from "./register-customer-action";
 

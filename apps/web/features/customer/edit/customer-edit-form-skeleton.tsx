@@ -1,4 +1,4 @@
-import { EditCustomerForm } from "../register/edit-customer-form";
+import { EditCustomerForm } from "@/features/customer/register/edit-customer-form";
 
 export function CustomerEditFormSkeleton() {
 	return (

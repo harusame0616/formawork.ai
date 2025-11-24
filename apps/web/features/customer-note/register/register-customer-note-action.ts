@@ -12,8 +12,8 @@ import {
 } from "@workspace/db/schema/customer-note";
 import { updateTag } from "next/cache";
 import * as v from "valibot";
-import { getUserStaffId } from "../../auth/get-user-staff-id";
-import { CustomerTag } from "../../customer/tag";
+import { getUserStaffId } from "@/features/auth/get-user-staff-id";
+import { CustomerTag } from "@/features/customer/tag";
 
 const INVALID_INPUT_ERROR_MESSAGE = "入力内容に誤りがあります" as const;
 const UNAUTHORIZED_ERROR_MESSAGE = "認証に失敗しました" as const;

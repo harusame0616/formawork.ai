@@ -1,5 +1,5 @@
-import { getUserRole, UserRole } from "../../auth/get-user-role";
-import { getUserStaffId } from "../../auth/get-user-staff-id";
+import { getUserRole, UserRole } from "@/features/auth/get-user-role";
+import { getUserStaffId } from "@/features/auth/get-user-staff-id";
 import { CustomerNotesPresenter } from "./customer-notes-presenter";
 import {
 	type CustomerNoteSearchCondition,

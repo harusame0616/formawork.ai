@@ -2,10 +2,10 @@ import { Card } from "@workspace/ui/components/card";
 import Link from "next/link";
 import { Suspense } from "react";
 import * as v from "valibot";
-import { CustomerSearchForm } from "../../../features/customer/list/customer-search-form";
-import { CustomersContainer } from "../../../features/customer/list/customers-container";
-import { CustomersSkeleton } from "../../../features/customer/list/customers-skeleton";
-import { customerSearchParamsSchema } from "../../../features/customer/schema";
+import { CustomerSearchForm } from "@/features/customer/list/customer-search-form";
+import { CustomersContainer } from "@/features/customer/list/customers-container";
+import { CustomersSkeleton } from "@/features/customer/list/customers-skeleton";
+import { customerSearchParamsSchema } from "@/features/customer/schema";
 import { SuspenseOnSearch } from "../../../libs/suspense-on-search";
 
 type CustomersPageProps = {
