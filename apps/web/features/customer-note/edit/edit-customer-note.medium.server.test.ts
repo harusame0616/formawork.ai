@@ -1,6 +1,6 @@
 import { expect, test, vi } from "vitest";
-import { UserRole } from "../../../lib/auth/get-user-role";
-import { deleteCustomerNote } from "./delete-customer-note";
+import { UserRole } from "../../auth/get-user-role";
+import { editCustomerNote } from "./edit-customer-note";
 
 // Loggerをモック
 vi.mock("@repo/logger/nextjs/server", () => ({
@@ -11,13 +11,15 @@ vi.mock("@repo/logger/nextjs/server", () => ({
 	}),
 }));
 
-test("管理者ではない別ユーザーが他人のノートを削除しようとした場合にエラーが返される", async () => {
+test("管理者ではない別ユーザーが他人のノートを編集しようとした場合にエラーが返される", async () => {
 	// seed データの最初のノート（staffId: 00000000-0000-0000-0000-000000000001 が作成）
 	const noteId = "10000000-0000-0000-0000-000000000001";
 
-	// 別ユーザー（staffId: 00000000-0000-0000-0000-000000000002）で削除を試みる
-	const result = await deleteCustomerNote({
+	// 別ユーザー（staffId: 00000000-0000-0000-0000-000000000002）で編集を試みる
+	const result = await editCustomerNote({
+		content: "編集後の内容",
 		customerNoteId: noteId,
+		uploadImages: [],
 		user: {
 			role: UserRole.User,
 			userId: "00000000-0000-0000-0000-000000000002",

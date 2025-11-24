@@ -17,8 +17,8 @@ import type { Route } from "next";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as v from "valibot";
-import { CUSTOMER_SEARCH_KEYWORD_MAX_LENGTH } from "../../../features/customer/schema";
 import { useIsHydrated } from "../../../libs/use-is-hydrated";
+import { CUSTOMER_SEARCH_KEYWORD_MAX_LENGTH } from "../schema";
 
 const customerSearchFormSchema = v.object({
 	keyword: v.pipe(

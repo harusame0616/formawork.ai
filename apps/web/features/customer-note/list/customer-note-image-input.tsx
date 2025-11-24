@@ -4,7 +4,7 @@ import { Button } from "@workspace/ui/components/button";
 import { ImageIcon, Loader2, X } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useRef } from "react";
-import type { UploadingImage } from "./use-image-upload";
+import type { UploadingImage } from "../register/use-image-upload";
 
 type CustomerNoteImageInputProps = {
 	images: UploadingImage[];

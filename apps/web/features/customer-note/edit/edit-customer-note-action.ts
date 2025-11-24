@@ -5,8 +5,8 @@ import { EventType } from "@repo/logger/event-types";
 import { getLogger } from "@repo/logger/nextjs/server";
 import { updateTag } from "next/cache";
 import * as v from "valibot";
-import { getUserRole } from "../../../lib/auth/get-user-role";
-import { getUserStaffId } from "../../../lib/auth/get-user-staff-id";
+import { getUserRole } from "../../auth/get-user-role";
+import { getUserStaffId } from "../../auth/get-user-staff-id";
 import { CustomerTag } from "../tag";
 import { editCustomerNote } from "./edit-customer-note";
 

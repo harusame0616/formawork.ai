@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { createUploadUrlAction } from "./actions/create-upload-url-action";
+import { createUploadUrlAction } from "./create-upload-url-action";
 
 type ImageUploadStatus = "pending" | "uploading" | "uploaded" | "error";
 

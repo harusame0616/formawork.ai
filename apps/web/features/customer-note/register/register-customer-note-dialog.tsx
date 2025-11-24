@@ -25,8 +25,8 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as v from "valibot";
-import { CustomerNoteImageInput } from "./customer-note-image-input";
-import { registerCustomerNoteAction } from "./register-customer-note-action";
+import { CustomerNoteImageInput } from "../list/customer-note-image-input";
+import { registerCustomerNoteAction } from "../register-customer-note-action";
 import { useImageUpload } from "./use-image-upload";
 
 const formSchema = v.object({

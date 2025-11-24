@@ -1,6 +1,6 @@
-import { getCustomers } from "../../../features/customer/get-customers";
-import type { CustomerSearchConditionInput } from "../../../features/customer/schema";
+import type { CustomerSearchConditionInput } from "../schema";
 import { CustomersPresenter } from "./customers-presenter";
+import { getCustomers } from "./get-customers";
 
 type CustomersContainerProps = {
 	condition: Promise<CustomerSearchConditionInput>;

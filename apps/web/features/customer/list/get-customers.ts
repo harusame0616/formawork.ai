@@ -7,8 +7,8 @@ import * as v from "valibot";
 import {
 	CUSTOMER_SEARCH_KEYWORD_MAX_LENGTH,
 	type CustomerSearchConditionInput,
-} from "./schema";
-import { CustomerTag } from "./tag";
+} from "../schema";
+import { CustomerTag } from "../tag";
 
 type GetCustomersResult = {
 	customers: SelectCustomer[];
