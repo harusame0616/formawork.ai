@@ -1,5 +1,5 @@
 import { expect, test, vi } from "vitest";
-import { UserRole } from "../../auth/user-role";
+import { UserRole } from "@/features/auth/get-user-role";
 import { deleteCustomerNote } from "./delete-customer-note";
 
 // Loggerをモック

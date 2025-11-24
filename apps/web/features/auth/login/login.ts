@@ -1,7 +1,7 @@
 import { fail, type Result, succeed } from "@harusame0616/result";
 import { createClient } from "@repo/supabase/nextjs/server";
 import type * as v from "valibot";
-import type { loginSchema } from "./schema";
+import type { loginSchema } from "../schema";
 
 type LoginParams = v.InferOutput<typeof loginSchema>;
 
