@@ -39,7 +39,6 @@ export function DeleteCustomerDialog({
 			}
 
 			setErrorMessage(null);
-			setOpen(false);
 			router.replace("/customers");
 		});
 	}
