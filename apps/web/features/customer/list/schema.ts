@@ -24,9 +24,7 @@ export type CustomersConditionSearchParams = v.InferOutput<
 	typeof customersConditionSearchParamsSchema
 >;
 
-export type CustomersCondition = v.InferOutput<
-	typeof customersConditionSearchParamsSchema
->;
+export type CustomersCondition = v.InferOutput<typeof customersConditionSchema>;
 
 export function parseCustomersConditionSearchParams(value: unknown) {
 	const result = v.safeParse(customersConditionSearchParamsSchema, value);
