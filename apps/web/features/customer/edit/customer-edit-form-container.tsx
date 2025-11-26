@@ -9,6 +9,9 @@ type CustomerEditFormContainerProps = {
 export async function CustomerEditFormContainer({
 	customerIdPromise,
 }: CustomerEditFormContainerProps) {
+	// 権限がないときはリンクを表示しないのとサーバーアクションで権限チェックを入れているので、
+	// ここではロールによるアクセス制御を行わない
+
 	const customer = await getCustomerDetail(await customerIdPromise);
 
 	if (!customer) {

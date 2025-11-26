@@ -1,10 +1,12 @@
 import { Card } from "@workspace/ui/components/card";
-import Link from "next/link";
+import { Skeleton } from "@workspace/ui/components/skeleton";
+import { Suspense } from "react";
 import { CustomerSearchFormContainer } from "@/features/customer/list/customer-search-form-container";
 import { CustomerSearchForm } from "@/features/customer/list/customer-search-form-presenter";
 import { CustomersContainer } from "@/features/customer/list/customers-container";
 import { CustomersSkeleton } from "@/features/customer/list/customers-skeleton";
 import { parseCustomersConditionSearchParams } from "@/features/customer/list/schema";
+import { RegisterNewCustomerLinkContainer } from "@/features/customer/register/register-new-customer-link-container";
 import { SuspenseOnSearch } from "@/libs/suspense-on-search";
 
 export default function Page({ searchParams }: PageProps<"/customers">) {
@@ -16,9 +18,9 @@ export default function Page({ searchParams }: PageProps<"/customers">) {
 		<div className="container mx-auto p-2 space-y-4">
 			<div className="flex items-center justify-between">
 				<h1 className="font-bold">顧客一覧</h1>
-				<Link className="text-primary underline" href="/customers/new">
-					新規登録
-				</Link>
+				<Suspense fallback={<Skeleton className="h-4 w-16" />}>
+					<RegisterNewCustomerLinkContainer />
+				</Suspense>
 			</div>
 			<Card className="p-4 w-full">
 				<SuspenseOnSearch

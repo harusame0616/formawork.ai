@@ -30,18 +30,18 @@ const test = base.extend<{
 });
 
 test("必須フィールドを全て入力して編集できる", async ({ page, customer }) => {
-	const testUser = {
-		email: "test1@example.com",
-		password: "Test@Pass123",
+	const adminUser = {
+		email: "admin@example.com",
+		password: "Admin@789!",
 	};
 
-	await test.step("ログイン", async () => {
+	await test.step("ログイン（顧客編集はAdminのみ可能）", async () => {
 		await page.goto("/login");
 
-		await page.getByLabel("メールアドレス").fill(testUser.email);
+		await page.getByLabel("メールアドレス").fill(adminUser.email);
 		await page
 			.getByRole("textbox", { name: "パスワード" })
-			.fill(testUser.password);
+			.fill(adminUser.password);
 
 		await page.getByRole("button", { name: "ログイン" }).click();
 		await page.waitForURL("/");
@@ -87,17 +87,17 @@ test("必須フィールドを全て入力して編集できる", async ({ page,
 });
 
 test("必須フィールド以外を空で編集できる", async ({ page, customer }) => {
-	const testUser = {
-		email: "test1@example.com",
-		password: "Test@Pass123",
+	const adminUser = {
+		email: "admin@example.com",
+		password: "Admin@789!",
 	};
 
-	await test.step("ログイン", async () => {
+	await test.step("ログイン（顧客編集はAdminのみ可能）", async () => {
 		await page.goto("/login");
-		await page.getByLabel("メールアドレス").fill(testUser.email);
+		await page.getByLabel("メールアドレス").fill(adminUser.email);
 		await page
 			.getByRole("textbox", { name: "パスワード" })
-			.fill(testUser.password);
+			.fill(adminUser.password);
 		await page.getByRole("button", { name: "ログイン" }).click();
 		await page.waitForURL("/");
 	});

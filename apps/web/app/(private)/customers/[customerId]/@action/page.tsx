@@ -20,10 +20,9 @@ async function Action({
 	customerIdPromise: Promise<string>;
 }) {
 	const customerId = await customerIdPromise;
-	const userRole = await getUserRole();
-	const isAdmin = userRole === UserRole.Admin;
+	const isAdmin = (await getUserRole()) === UserRole.Admin;
 
-	return (
+	return isAdmin ? (
 		<div className="flex items-center gap-2">
 			<Link
 				className="text-primary underline flex items-center gap-1"
@@ -31,7 +30,7 @@ async function Action({
 			>
 				編集
 			</Link>
-			{isAdmin && <DeleteCustomerDialog customerId={customerId} />}
+			<DeleteCustomerDialog customerId={customerId} />
 		</div>
-	);
+	) : null;
 }

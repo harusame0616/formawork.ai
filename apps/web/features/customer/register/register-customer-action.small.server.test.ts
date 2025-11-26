@@ -1,4 +1,4 @@
-import { expect, test, vi } from "vitest";
+import { type Mock, expect, test as base, vi } from "vitest";
 import { registerCustomerAction } from "./register-customer-action";
 
 vi.mock("next/cache", async () => ({
@@ -20,6 +20,38 @@ vi.mock("@repo/logger/nextjs/server", () => ({
 vi.mock("./register-customer", () => ({
 	registerCustomer: vi.fn(),
 }));
+
+vi.mock("@/features/auth/get-user-staff-id", () => ({
+	getUserStaffId: vi.fn(),
+}));
+
+vi.mock("@/features/auth/get-user-role", () => ({
+	getUserRole: vi.fn(),
+}));
+
+const test = base.extend<{
+	getUserStaffIdMock: Mock;
+	getUserRoleMock: Mock;
+}>({
+	// biome-ignore lint/correctness/noEmptyPattern: Vitestのfixtureパターンで使用する標準的な記法
+	// biome-ignore lint/suspicious/noExplicitAny: https://github.com/vitest-dev/vitest/discussions/5710
+	getUserRoleMock: async ({}, use: any) => {
+		const getUserRoleModule = await import("@/features/auth/get-user-role");
+		const mock = vi.mocked(getUserRoleModule.getUserRole);
+		await use(mock);
+		vi.clearAllMocks();
+	},
+	// biome-ignore lint/correctness/noEmptyPattern: Vitestのfixtureパターンで使用する標準的な記法
+	// biome-ignore lint/suspicious/noExplicitAny: https://github.com/vitest-dev/vitest/discussions/5710
+	getUserStaffIdMock: async ({}, use: any) => {
+		const getUserStaffIdModule = await import(
+			"@/features/auth/get-user-staff-id"
+		);
+		const mock = vi.mocked(getUserStaffIdModule.getUserStaffId);
+		await use(mock);
+		vi.clearAllMocks();
+	},
+});
 
 test("メール形式が不正な場合にバリデーションエラーを返す", async () => {
 	const { registerCustomer } = await import("./register-customer");
@@ -94,9 +126,14 @@ test("phone が21文字（境界値超過）の場合にバリデーションエ
 	expect(registerCustomer).not.toHaveBeenCalled();
 });
 
-test("登録処理でエラーが発生した場合にエラーメッセージを返す", async () => {
+test("登録処理でエラーが発生した場合にエラーメッセージを返す", async ({
+	getUserStaffIdMock,
+	getUserRoleMock,
+}) => {
 	const { registerCustomer } = await import("./register-customer");
 
+	getUserStaffIdMock.mockResolvedValue("staff-id");
+	getUserRoleMock.mockResolvedValue("admin");
 	vi.mocked(registerCustomer).mockRejectedValue(new Error("Database error"));
 
 	const input = {
@@ -114,4 +151,50 @@ test("登録処理でエラーが発生した場合にエラーメッセージ�
 			"サーバーエラーが発生しました。時間をおいて再度お試しください",
 		);
 	}
+});
+
+test("認証されていない場合、認証エラーが返される", async ({
+	getUserStaffIdMock,
+}) => {
+	const { registerCustomer } = await import("./register-customer");
+
+	getUserStaffIdMock.mockResolvedValue(null);
+
+	const input = {
+		email: "test@example.com",
+		name: "テスト太郎",
+		phone: "09012345678",
+	};
+
+	const result = await registerCustomerAction(input);
+
+	expect(result.success).toBe(false);
+	if (!result.success) {
+		expect(result.error).toBe("認証に失敗しました");
+	}
+	expect(registerCustomer).not.toHaveBeenCalled();
+});
+
+test("一般ユーザーロールの場合、権限エラーが返される", async ({
+	getUserStaffIdMock,
+	getUserRoleMock,
+}) => {
+	const { registerCustomer } = await import("./register-customer");
+
+	getUserStaffIdMock.mockResolvedValue("staff-id");
+	getUserRoleMock.mockResolvedValue("user");
+
+	const input = {
+		email: "test@example.com",
+		name: "テスト太郎",
+		phone: "09012345678",
+	};
+
+	const result = await registerCustomerAction(input);
+
+	expect(result.success).toBe(false);
+	if (!result.success) {
+		expect(result.error).toBe("この操作を実行する権限がありません");
+	}
+	expect(registerCustomer).not.toHaveBeenCalled();
 });

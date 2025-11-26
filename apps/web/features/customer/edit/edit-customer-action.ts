@@ -4,6 +4,7 @@ import { fail, type Result, succeed } from "@harusame0616/result";
 import { EventType } from "@repo/logger/event-types";
 import { getLogger } from "@repo/logger/nextjs/server";
 import { updateTag } from "next/cache";
+import { getUserRole } from "@/features/auth/get-user-role";
 import { getUserStaffId } from "@/features/auth/get-user-staff-id";
 import { tagByCustomerId } from "@/features/customer/tag";
 import { type EditCustomerErrorMessage, editCustomer } from "./edit-customer";
@@ -11,6 +12,7 @@ import { type EditCustomerParams, parseEditCustomerParams } from "./schema";
 
 const INVALID_INPUT_ERROR_MESSAGE = "入力内容に誤りがあります" as const;
 const UNAUTHORIZED_ERROR_MESSAGE = "認証に失敗しました" as const;
+const FORBIDDEN_ERROR_MESSAGE = "この操作を実行する権限がありません" as const;
 const INTERNAL_SERVER_ERROR_MESSAGE =
 	"サーバーエラーが発生しました。時間をおいて再度お試しください" as const;
 
@@ -18,6 +20,7 @@ type EditCustomerActionErrorMessage =
 	| EditCustomerErrorMessage
 	| typeof INVALID_INPUT_ERROR_MESSAGE
 	| typeof UNAUTHORIZED_ERROR_MESSAGE
+	| typeof FORBIDDEN_ERROR_MESSAGE
 	| typeof INTERNAL_SERVER_ERROR_MESSAGE;
 
 export async function editCustomerAction(
@@ -43,6 +46,15 @@ export async function editCustomerAction(
 			event: EventType.AuthenticationFailure,
 		});
 		return fail(UNAUTHORIZED_ERROR_MESSAGE);
+	}
+
+	const role = await getUserRole();
+	if (role !== "admin") {
+		logger.warn("権限がないアクセス", {
+			customerId: parsedParams.data.customerId,
+			event: EventType.AuthorizationError,
+		});
+		return fail(FORBIDDEN_ERROR_MESSAGE);
 	}
 
 	try {

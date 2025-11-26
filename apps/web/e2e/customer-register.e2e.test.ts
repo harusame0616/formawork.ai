@@ -11,17 +11,17 @@ type RegisterCustomerPageFixture = {
 
 const test = base.extend<RegisterCustomerPageFixture>({
 	registerCustomerPage: async ({ page }, use) => {
-		const testUser = {
-			email: "test1@example.com",
-			password: "Test@Pass123",
+		const adminUser = {
+			email: "admin@example.com",
+			password: "Admin@789!",
 		};
 
-		// ログイン処理
+		// ログイン処理（顧客登録はAdminのみ可能）
 		await page.goto("/login");
-		await page.getByLabel("メールアドレス").fill(testUser.email);
+		await page.getByLabel("メールアドレス").fill(adminUser.email);
 		await page
 			.getByRole("textbox", { name: "パスワード" })
-			.fill(testUser.password);
+			.fill(adminUser.password);
 		await page.getByRole("button", { name: "ログイン" }).click();
 		await page.waitForURL("/");
 
