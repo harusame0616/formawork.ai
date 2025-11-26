@@ -5,9 +5,13 @@ vi.mock("next/cache", async () => ({
 	updateTag: vi.fn(),
 }));
 
-vi.mock("next/navigation", () => ({
-	redirect: vi.fn(),
-}));
+vi.mock("next/navigation", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("next/navigation")>();
+	return {
+		...actual,
+		redirect: vi.fn(),
+	};
+});
 
 vi.mock("@repo/logger/nextjs/server", () => ({
 	getLogger: vi.fn().mockResolvedValue({
@@ -15,6 +19,14 @@ vi.mock("@repo/logger/nextjs/server", () => ({
 		info: vi.fn(),
 		warn: vi.fn(),
 	}),
+}));
+
+vi.mock("@/features/auth/get-user-staff-id", () => ({
+	getUserStaffId: vi.fn().mockResolvedValue("test-staff-id"),
+}));
+
+vi.mock("@/features/auth/get-user-role", () => ({
+	getUserRole: vi.fn().mockResolvedValue("user"),
 }));
 
 vi.mock("./register-customer", () => ({

@@ -13,9 +13,14 @@ vi.mock("@/features/auth/get-user-staff-id", () => ({
 	getUserStaffId: vi.fn(),
 }));
 
-vi.mock("@/features/auth/get-user-role", () => ({
-	getUserRole: vi.fn(),
-}));
+vi.mock("@/features/auth/get-user-role", async (importOriginal) => {
+	const actual =
+		await importOriginal<typeof import("@/features/auth/get-user-role")>();
+	return {
+		...actual,
+		getUserRole: vi.fn(),
+	};
+});
 
 const test = base.extend<{
 	getUserStaffIdMock: Mock;

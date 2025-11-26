@@ -1,5 +1,21 @@
-import { expect, test } from "vitest";
+import { expect, test, vi } from "vitest";
 import { loginAction } from "./login-action";
+
+vi.mock("@repo/logger/nextjs/server", () => ({
+	getLogger: vi.fn().mockResolvedValue({
+		error: vi.fn(),
+		info: vi.fn(),
+		warn: vi.fn(),
+	}),
+}));
+
+vi.mock("@/features/auth/get-user-staff-id", () => ({
+	getUserStaffId: vi.fn(),
+}));
+
+vi.mock("@/features/auth/get-user-role", () => ({
+	getUserRole: vi.fn(),
+}));
 
 test.each([
 	{ description: "引数が undefined", input: undefined },
