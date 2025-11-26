@@ -2,6 +2,7 @@ import { fail, type Result } from "@harusame0616/result";
 import { EventType } from "@repo/logger/event-types";
 import type { Logger } from "@repo/logger/logger";
 import { getLogger } from "@repo/logger/nextjs/server";
+import { unstable_rethrow } from "next/navigation";
 import type * as v from "valibot";
 import * as valibot from "valibot";
 import { getUserRole, type UserRole } from "@/features/auth/get-user-role";
@@ -141,6 +142,7 @@ export function createServerAction<
 
 			return result;
 		} catch (error) {
+			unstable_rethrow(error);
 			logger.error(`${options.name} で予期しないエラーが発生`, { err: error });
 			return fail(INTERNAL_SERVER_ERROR_MESSAGE);
 		}
