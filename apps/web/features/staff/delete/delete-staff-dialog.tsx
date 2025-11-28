@@ -12,15 +12,13 @@ import {
 } from "@workspace/ui/components/dialog";
 import { AlertCircle, Loader2, Trash2 } from "lucide-react";
 import { useState, useTransition } from "react";
-import { deleteCustomerAction } from "./delete-customer-action";
+import { deleteStaffAction } from "./delete-staff-action";
 
-type DeleteCustomerDialogProps = {
-	customerId: string;
+type DeleteStaffDialogProps = {
+	staffId: string;
 };
 
-export function DeleteCustomerDialog({
-	customerId,
-}: DeleteCustomerDialogProps) {
+export function DeleteStaffDialog({ staffId }: DeleteStaffDialogProps) {
 	const [open, setOpen] = useState(false);
 	const [isPending, startTransition] = useTransition();
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -29,7 +27,7 @@ export function DeleteCustomerDialog({
 		setErrorMessage(null);
 
 		startTransition(async () => {
-			const result = await deleteCustomerAction({ customerId });
+			const result = await deleteStaffAction({ staffId });
 
 			if (!result.success) {
 				setErrorMessage(result.error);
@@ -57,9 +55,19 @@ export function DeleteCustomerDialog({
 			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>顧客を削除</DialogTitle>
-					<DialogDescription>
-						この顧客を削除してもよろしいですか？関連するすべてのノートと画像も削除されます。この操作は取り消せません。
+					<DialogTitle>スタッフを削除</DialogTitle>
+					<DialogDescription asChild>
+						<div className="space-y-2">
+							<p>
+								このスタッフを削除してもよろしいですか？この操作は取り消せません。
+							</p>
+							<p>
+								スタッフに紐づくデータ（作成した顧客ノートなど）も削除されます。
+							</p>
+							<p>
+								退職などの場合は、削除ではなくスタッフの無効化を推奨します。
+							</p>
+						</div>
 					</DialogDescription>
 				</DialogHeader>
 

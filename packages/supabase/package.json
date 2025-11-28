@@ -26,5 +26,6 @@
 		"supabase:start": "supabase start",
 		"type:check": "tsc --noEmit"
 	},
+	"type": "module",
 	"version": "0.0.0"
 }
