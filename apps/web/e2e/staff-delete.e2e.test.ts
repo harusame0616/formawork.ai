@@ -1,5 +1,6 @@
 import { test as base, expect, type Page } from "@playwright/test";
 import { v4 } from "uuid";
+import { registerStaff } from "@/features/staff/register/register-staff";
 
 type Fixtures = {
 	adminUserPage: Page;
@@ -7,7 +8,7 @@ type Fixtures = {
 	testStaff: {
 		email: string;
 		name: string;
-		password: string;
+		staffId: string;
 	};
 };
 
@@ -46,14 +47,25 @@ const test = base.extend<Fixtures>({
 		await use(page);
 	},
 
-	// biome-ignore lint/correctness/noEmptyPattern: Vitestのfixtureパターンで使用する標準的な記法
+	// biome-ignore lint/correctness/noEmptyPattern: Playwrightのfixtureパターンで使用する標準的な記法
 	async testStaff({}, use) {
-		const testStaff = {
+		const staffData = {
 			email: `test-staff-${v4()}@example.com`,
 			name: `テスト削除用スタッフ ${v4().slice(0, 8)}`,
 			password: "TestStaff@123",
+			role: "user" as const,
 		};
-		await use(testStaff);
+
+		const result = await registerStaff(staffData);
+		if (!result.success) {
+			throw new Error(`テストスタッフの登録に失敗: ${result.error}`);
+		}
+
+		await use({
+			email: staffData.email,
+			name: staffData.name,
+			staffId: result.data.staffId,
+		});
 	},
 });
 
@@ -61,36 +73,10 @@ test("管理者がスタッフを削除できる", async ({
 	adminUserPage: page,
 	testStaff,
 }) => {
-	let staffId: string;
-
-	await test.step("テスト用スタッフを登録", async () => {
-		await page.goto("/staffs/new");
-		await page.waitForURL("/staffs/new");
-
-		await page.getByLabel("名前").fill(testStaff.name);
-		await page.getByLabel("メールアドレス").fill(testStaff.email);
-		await page
-			.getByRole("textbox", { name: "パスワード" })
-			.fill(testStaff.password);
-		await page.getByRole("radio", { name: "一般" }).click();
-
-		await page.getByRole("button", { name: "登録" }).click();
-
-		await page.waitForURL("/staffs");
-	});
-
 	await test.step("スタッフ詳細ページに遷移", async () => {
-		await page.getByLabel("検索キーワード").fill(testStaff.name);
-		await page.getByRole("button", { name: "検索" }).click();
-
-		const staffLink = page.getByRole("link", { name: testStaff.name });
-		await expect(staffLink).toBeVisible();
-
-		const href = await staffLink.getAttribute("href");
-		staffId = href?.replace("/staffs/", "") ?? "";
-
-		await staffLink.click();
-		await page.waitForURL(`/staffs/${staffId}`);
+		await page.goto(`/staffs/${testStaff.staffId}`);
+		await page.waitForURL(`/staffs/${testStaff.staffId}`);
+		await expect(page.getByText(testStaff.name)).toBeVisible();
 	});
 
 	await test.step("削除実行", async () => {
