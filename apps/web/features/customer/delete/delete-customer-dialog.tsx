@@ -11,7 +11,6 @@ import {
 	DialogTrigger,
 } from "@workspace/ui/components/dialog";
 import { AlertCircle, Loader2, Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { deleteCustomerAction } from "./delete-customer-action";
 
@@ -22,7 +21,6 @@ type DeleteCustomerDialogProps = {
 export function DeleteCustomerDialog({
 	customerId,
 }: DeleteCustomerDialogProps) {
-	const _router = useRouter();
 	const [open, setOpen] = useState(false);
 	const [isPending, startTransition] = useTransition();
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);

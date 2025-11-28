@@ -11,7 +11,6 @@ import {
 	DialogTrigger,
 } from "@workspace/ui/components/dialog";
 import { AlertCircle, Loader2, Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { deleteStaffAction } from "./delete-staff-action";
 
@@ -20,7 +19,6 @@ type DeleteStaffDialogProps = {
 };
 
 export function DeleteStaffDialog({ staffId }: DeleteStaffDialogProps) {
-	const _router = useRouter();
 	const [open, setOpen] = useState(false);
 	const [isPending, startTransition] = useTransition();
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
