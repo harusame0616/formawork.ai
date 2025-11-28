@@ -129,22 +129,13 @@ test("一般ユーザーにはスタッフ削除ボタンが表示されない",
 test("管理者でも自分自身の詳細ページでは削除ボタンが表示されない", async ({
 	adminUserPage: page,
 }) => {
-	await test.step("スタッフ一覧ページに遷移", async () => {
-		await page.goto("/staffs");
-		await page.waitForURL("/staffs");
-	});
-
-	await test.step("管理者のメールアドレスで検索", async () => {
-		await page.getByLabel("検索キーワード").fill("admin@example.com");
-		await page.getByRole("button", { name: "検索" }).click();
-	});
-
 	await test.step("自分自身の詳細ページに遷移", async () => {
-		const adminLink = page.getByRole("link", { name: /Admin/i }).first();
-		await adminLink.click();
+		await page.goto("/staffs/00000000-0000-0000-0000-000000000003");
+		await page.waitForURL("/staffs/00000000-0000-0000-0000-000000000003");
 	});
 
 	await test.step("削除ボタンが表示されないことを確認", async () => {
+		await expect(page.getByText("佐藤 次郎")).toBeVisible();
 		await expect(page.getByRole("button", { name: "削除" })).toBeHidden();
 	});
 });
