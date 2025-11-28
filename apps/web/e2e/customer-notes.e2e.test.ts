@@ -103,11 +103,11 @@ test("正常系: 4096文字（最大境界値）のノート登録成功", async
 test("正常系: 5枚の画像を含むノート登録成功", async ({ customerNotesPage }) => {
 	const noteContent = `画像5枚のテストノート (${randomUUID()})`;
 	const imagePaths = [
-		path.join(__dirname, "sample1.jpg"),
-		path.join(__dirname, "sample2.jpg"),
-		path.join(__dirname, "sample3.jpg"),
-		path.join(__dirname, "sample4.jpg"),
-		path.join(__dirname, "sample5.jpg"),
+		path.join(import.meta.dirname, "sample1.jpg"),
+		path.join(import.meta.dirname, "sample2.jpg"),
+		path.join(import.meta.dirname, "sample3.jpg"),
+		path.join(import.meta.dirname, "sample4.jpg"),
+		path.join(import.meta.dirname, "sample5.jpg"),
 	];
 
 	await test.step("ノート追加ダイアログを開く", async () => {

@@ -47,5 +47,6 @@
 		"test:server": "vitest --run --project server",
 		"type:check": "echo 'nextjs で tsc でのタイプチェックは非推奨のため未実施。 （build 時に型チェック）'"
 	},
+	"type": "module",
 	"version": "0.1.0"
 }
