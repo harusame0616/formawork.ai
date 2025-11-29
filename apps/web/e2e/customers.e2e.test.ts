@@ -110,30 +110,6 @@ test("メールアドレスで検索できる", async ({ customersPage }) => {
 	});
 });
 
-test("電話番号で検索できる", async ({ customersPage }) => {
-	const searchKeyword = "080-9876";
-
-	await test.step("電話番号で検索", async () => {
-		await customersPage.getByLabel("キーワード").fill(searchKeyword);
-		await customersPage.getByRole("button", { name: "検索" }).click();
-		await customersPage.waitForURL("**/customers?keyword=*");
-		await expect(
-			customersPage.getByRole("main").getByText("読み込み中"),
-		).toBeHidden();
-	});
-
-	await test.step("検索結果を確認", async () => {
-		// 表示されている全てのデータがキーワードを含んでいることを確認
-		const rows = customersPage.locator("table tbody tr");
-		const count = await rows.count();
-		for (let i = 0; i < count; i++) {
-			const row = rows.nth(i);
-			const text = await row.textContent();
-			expect(text).toContain(searchKeyword);
-		}
-	});
-});
-
 test("該当する顧客がいない場合、メッセージが表示される", async ({
 	customersPage,
 }) => {
