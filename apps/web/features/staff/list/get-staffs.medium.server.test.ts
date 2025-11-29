@@ -20,7 +20,8 @@ vi.mock("@repo/logger/nextjs/server", () => ({
 const test = base.extend<{
 	staff: {
 		id: string;
-		name: string;
+		firstName: string;
+		lastName: string;
 		email: string;
 	};
 }>({
@@ -28,11 +29,13 @@ const test = base.extend<{
 	async staff({}, use) {
 		const uniqueId = v4().slice(0, 8);
 		const email = `test-staff-${uniqueId}@example.com`;
-		const name = `テストスタッフ${uniqueId}`;
+		const firstName = `太郎${uniqueId}`;
+		const lastName = `テスト${uniqueId}`;
 
 		const result = await registerStaff({
 			email,
-			name,
+			firstName,
+			lastName,
 			password: "TestPassword123!",
 			role: "user",
 		});
@@ -43,8 +46,9 @@ const test = base.extend<{
 
 		await use({
 			email,
+			firstName,
 			id: result.data.staffId,
-			name,
+			lastName,
 		});
 
 		await deleteStaff({
@@ -54,30 +58,33 @@ const test = base.extend<{
 	},
 });
 
-test("名前で検索できる", async ({ staff }) => {
+test("firstName で完全一致検索できる", async ({ staff }) => {
 	const nameSearchResult = await getStaffs({
-		keyword: staff.name,
+		keyword: staff.firstName,
 		page: 1,
 	});
 
 	expect(nameSearchResult.staffs.length).toBe(1);
+	expect(nameSearchResult.staffs[0]?.firstName).toBe(staff.firstName);
 });
 
-test("大文字小文字を区別せずに検索できる", async ({ staff }) => {
+test("lastName で完全一致検索できる", async ({ staff }) => {
 	const nameSearchResult = await getStaffs({
-		keyword: staff.name.toUpperCase(),
+		keyword: staff.lastName,
 		page: 1,
 	});
 
 	expect(nameSearchResult.staffs.length).toBe(1);
+	expect(nameSearchResult.staffs[0]?.lastName).toBe(staff.lastName);
 });
 
-test("メールアドレスで検索できる", async ({ staff }) => {
-	const emailSearchResult = await getStaffs({
-		keyword: staff.email,
+test("部分一致では検索できない", async ({ staff }) => {
+	const partialFirstName = staff.firstName.slice(0, 2);
+
+	const nameSearchResult = await getStaffs({
+		keyword: partialFirstName,
 		page: 1,
 	});
 
-	expect(emailSearchResult.staffs.length).toBe(1);
-	expect(emailSearchResult.staffs[0]?.email).toBe(staff.email);
+	expect(nameSearchResult.staffs.length).toBe(0);
 });
