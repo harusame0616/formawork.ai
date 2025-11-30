@@ -51,7 +51,7 @@ async function seedUsers() {
 				app_metadata: { role: user.role, staffId: user.staffId },
 				email: user.email,
 				email_confirm: true,
-				id: user.id,
+				// id: user.id,
 				password: user.password,
 			});
 

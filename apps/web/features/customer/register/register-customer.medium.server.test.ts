@@ -4,10 +4,11 @@ import { eq } from "drizzle-orm";
 import { expect, test } from "vitest";
 import { registerCustomer } from "./register-customer";
 
-test("name が24文字（境界値）で登録できる", async () => {
+test("lastName が24文字（境界値）で登録できる", async () => {
 	const input = {
-		email: `test-name-24-${Date.now()}@example.com`,
-		name: "あ".repeat(24),
+		email: `test-last-name-24-${Date.now()}@example.com`,
+		firstName: "太郎",
+		lastName: "あ".repeat(24),
 		phone: "",
 	};
 
@@ -22,7 +23,7 @@ test("name が24文字（境界値）で登録できる", async () => {
 		.limit(1);
 
 	expect(customers).toHaveLength(1);
-	expect(customers[0]?.name).toBe(input.name);
+	expect(customers[0]?.lastName).toBe(input.lastName);
 
 	await db.delete(customersTable).where(eq(customersTable.email, input.email));
 });
@@ -30,7 +31,8 @@ test("name が24文字（境界値）で登録できる", async () => {
 test("email が254文字（境界値）で登録できる", async () => {
 	const input = {
 		email: `${"a".repeat(242)}@example.com`,
-		name: "テスト太郎",
+		firstName: "太郎",
+		lastName: "テスト",
 		phone: "",
 	};
 
@@ -53,7 +55,8 @@ test("email が254文字（境界値）で登録できる", async () => {
 test("phone が20文字（境界値）で登録できる", async () => {
 	const input = {
 		email: `test-phone-20-${Date.now()}@example.com`,
-		name: "テスト太郎",
+		firstName: "太郎",
+		lastName: "テスト",
 		phone: "0".repeat(20),
 	};
 

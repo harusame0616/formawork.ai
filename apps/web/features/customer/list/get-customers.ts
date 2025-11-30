@@ -1,7 +1,7 @@
 import { db } from "@workspace/db/client";
 import type { SelectCustomer } from "@workspace/db/schema/customer";
 import { customersTable } from "@workspace/db/schema/customer";
-import { desc, ilike, or } from "drizzle-orm";
+import { asc, eq, or } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 import { CustomerTag } from "../tag";
 import type { CustomersCondition } from "./schema";
@@ -23,8 +23,8 @@ export async function getCustomers({
 	const pageSize = 20;
 	const whereConditions = keyword
 		? or(
-				ilike(customersTable.name, `%${keyword}%`),
-				ilike(customersTable.email, `%${keyword}%`),
+				eq(customersTable.firstName, keyword),
+				eq(customersTable.lastName, keyword),
 			)
 		: undefined;
 
@@ -32,7 +32,7 @@ export async function getCustomers({
 		.select()
 		.from(customersTable)
 		.where(whereConditions)
-		.orderBy(desc(customersTable.createdAt))
+		.orderBy(asc(customersTable.lastName), asc(customersTable.firstName))
 		.limit(pageSize)
 		.offset((page - 1) * pageSize);
 

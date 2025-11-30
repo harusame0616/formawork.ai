@@ -8,7 +8,8 @@ type Fixtures = {
 	customer: {
 		customerId: string;
 		email: string;
-		name: string;
+		firstName: string;
+		lastName: string;
 		phone: string;
 	};
 	adminUserPage: Page;
@@ -37,7 +38,8 @@ const test = base.extend<Fixtures>({
 		const customer = {
 			customerId: v4(),
 			email: `${v4()}@example.com`,
-			name: v4().slice(0, 24),
+			firstName: v4().slice(0, 12),
+			lastName: v4().slice(0, 12),
 			phone: `${Math.floor(Math.random() * 1000000000)}`,
 		};
 
@@ -82,7 +84,7 @@ test("管理者が顧客を削除できる", async ({ adminUserPage: page, custo
 	});
 
 	await test.step("削除された顧客を検索してもヒットしないことを確認", async () => {
-		await page.getByLabel("キーワード").fill(customer.name);
+		await page.getByLabel("キーワード").fill(customer.lastName);
 		await page.getByRole("button", { name: "検索" }).click();
 
 		// 「顧客が見つかりませんでした」が表示される

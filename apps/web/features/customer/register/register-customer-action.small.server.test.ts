@@ -64,7 +64,8 @@ const test = base.extend<{
 
 const validInput = {
 	email: "test@example.com",
-	name: "テスト太郎",
+	firstName: "太郎",
+	lastName: "テスト",
 	phone: "09012345678",
 };
 
@@ -106,7 +107,8 @@ test("メール形式が不正な場合にバリデーションエラーを返�
 
 	const input = {
 		email: "invalid-email",
-		name: "テスト太郎",
+		firstName: "太郎",
+		lastName: "テスト",
 		phone: "09012345678",
 	};
 
@@ -120,7 +122,7 @@ test("メール形式が不正な場合にバリデーションエラーを返�
 	expect(registerCustomer).not.toHaveBeenCalled();
 });
 
-test("name が25文字（境界値超過）の場合にバリデーションエラーを返す", async ({
+test("lastName が25文字（境界値超過）の場合にバリデーションエラーを返す", async ({
 	getUserStaffIdMock,
 	getUserRoleMock,
 }) => {
@@ -130,7 +132,8 @@ test("name が25文字（境界値超過）の場合にバリデーションエ�
 
 	const input = {
 		email: "test@example.com",
-		name: "あ".repeat(25),
+		firstName: "太郎",
+		lastName: "あ".repeat(25),
 		phone: "",
 	};
 
@@ -154,7 +157,8 @@ test("email が255文字（境界値超過）の場合にバリデーション�
 
 	const input = {
 		email: `${"a".repeat(243)}@example.com`,
-		name: "テスト太郎",
+		firstName: "太郎",
+		lastName: "テスト",
 		phone: "",
 	};
 
@@ -178,7 +182,8 @@ test("phone が21文字（境界値超過）の場合にバリデーションエ
 
 	const input = {
 		email: "test@example.com",
-		name: "テスト太郎",
+		firstName: "太郎",
+		lastName: "テスト",
 		phone: "0".repeat(21),
 	};
 

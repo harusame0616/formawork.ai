@@ -18,7 +18,8 @@ const test = base.extend<{
 	customer: {
 		customerId: string;
 		email: string;
-		name: string;
+		firstName: string;
+		lastName: string;
 		phone: string;
 	};
 }>({
@@ -27,7 +28,8 @@ const test = base.extend<{
 		const customer = {
 			customerId: v4(),
 			email: `${v4()}@example.com`,
-			name: v4().slice(0, 24),
+			firstName: v4().slice(0, 12),
+			lastName: v4().slice(0, 12),
 			phone: `${Math.floor(Math.random() * 1000000000)}`,
 		};
 

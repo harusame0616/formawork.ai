@@ -24,6 +24,7 @@
 		"supabase:reset": "supabase db reset && pnpm supabase:seed",
 		"supabase:seed": "tsx --env-file-if-exists=.env src/seed.ts",
 		"supabase:start": "supabase start",
+		"supabase:stop": "supabase stop",
 		"type:check": "tsc --noEmit"
 	},
 	"type": "module",

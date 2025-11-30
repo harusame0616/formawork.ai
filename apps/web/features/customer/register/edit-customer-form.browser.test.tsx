@@ -29,17 +29,20 @@ const test = base.extend<{
 	},
 });
 
-test("名前が空の場合、エラーが表示される", async () => {
+test("姓名が空の場合、エラーが表示される", async () => {
 	render(<EditCustomerForm />);
 
 	// ハイドレーション完了を待つ
-	await expect.element(page.getByLabelText("名前")).not.toBeDisabled();
+	await expect.element(page.getByLabelText("姓")).not.toBeDisabled();
 
-	// 送信ボタンをクリック（名前を入力せず）
+	// 送信ボタンをクリック（姓名を入力せず）
 	await page.getByRole("button", { name: "登録する" }).click();
 
 	await expect
-		.element(page.getByText("名前を入力してください"))
+		.element(page.getByText("姓を入力してください"))
+		.toBeInTheDocument();
+	await expect
+		.element(page.getByText("名を入力してください"))
 		.toBeInTheDocument();
 });
 
@@ -47,10 +50,11 @@ test("メールアドレスの形式が不正な場合、エラーが表示さ�
 	render(<EditCustomerForm />);
 
 	// ハイドレーション完了を待つ
-	await expect.element(page.getByLabelText("名前")).not.toBeDisabled();
+	await expect.element(page.getByLabelText("姓")).not.toBeDisabled();
 
 	// 不正な形式のメールアドレスを入力
-	await page.getByLabelText("名前").fill("テスト太郎");
+	await page.getByLabelText("姓").fill("テスト");
+	await page.getByLabelText("名").fill("太郎");
 	await page.getByLabelText("メールアドレス").fill("invalid-email");
 
 	// 送信ボタンをクリック
@@ -70,10 +74,11 @@ test("送信中はボタンが無効化され、ローディング表示にな�
 	render(<EditCustomerForm />);
 
 	// ハイドレーション完了を待つ
-	await expect.element(page.getByLabelText("名前")).not.toBeDisabled();
+	await expect.element(page.getByLabelText("姓")).not.toBeDisabled();
 
 	// 有効な入力
-	await page.getByLabelText("名前").fill("テスト太郎");
+	await page.getByLabelText("姓").fill("テスト");
+	await page.getByLabelText("名").fill("太郎");
 
 	// 送信ボタンをクリック
 	await page.getByRole("button", { name: "登録する" }).click();
@@ -97,10 +102,11 @@ test("登録エラー時にエラーメッセージが表示される", async ({
 	render(<EditCustomerForm />);
 
 	// ハイドレーション完了を待つ
-	await expect.element(page.getByLabelText("名前")).not.toBeDisabled();
+	await expect.element(page.getByLabelText("姓")).not.toBeDisabled();
 
 	// 有効な入力
-	await page.getByLabelText("名前").fill("テスト太郎");
+	await page.getByLabelText("姓").fill("テスト");
+	await page.getByLabelText("名").fill("太郎");
 
 	// 送信ボタンをクリック
 	await page.getByRole("button", { name: "登録する" }).click();
@@ -116,23 +122,45 @@ test("登録エラー時にエラーメッセージが表示される", async ({
 		.toBeInTheDocument();
 });
 
-test("名前が25文字（最大値24文字を超える）場合、エラーが表示される", async () => {
+test("姓が25文字（最大値24文字を超える）場合、エラーが表示される", async () => {
 	render(<EditCustomerForm />);
 
 	// ハイドレーション完了を待つ
-	await expect.element(page.getByLabelText("名前")).not.toBeDisabled();
+	await expect.element(page.getByLabelText("姓")).not.toBeDisabled();
 
-	// 25文字の名前を入力
+	// 25文字の姓を入力
 	await page
-		.getByLabelText("名前")
-		.fill("あいうえおかきくけこさしすせそたちつてとなにぬねのは");
+		.getByLabelText("姓")
+		.fill("あいうえおかきくけこさしすせそたちつてとなにぬねの");
+	await page.getByLabelText("名").fill("太郎");
 
 	// 送信ボタンをクリック
 	await page.getByRole("button", { name: "登録する" }).click();
 
 	// バリデーションエラーが表示されることを確認
 	await expect
-		.element(page.getByText("名前は24文字以内で入力してください"))
+		.element(page.getByText("姓は24文字以内で入力してください"))
+		.toBeInTheDocument();
+});
+
+test("名が25文字（最大値24文字を超える）場合、エラーが表示される", async () => {
+	render(<EditCustomerForm />);
+
+	// ハイドレーション完了を待つ
+	await expect.element(page.getByLabelText("姓")).not.toBeDisabled();
+
+	// 25文字の名を入力
+	await page.getByLabelText("姓").fill("テスト");
+	await page
+		.getByLabelText("名")
+		.fill("あいうえおかきくけこさしすせそたちつてとなにぬねの");
+
+	// 送信ボタンをクリック
+	await page.getByRole("button", { name: "登録する" }).click();
+
+	// バリデーションエラーが表示されることを確認
+	await expect
+		.element(page.getByText("名は24文字以内で入力してください"))
 		.toBeInTheDocument();
 });
 
@@ -140,12 +168,13 @@ test("メールアドレスが255文字（最大値254文字を超える）場�
 	render(<EditCustomerForm />);
 
 	// ハイドレーション完了を待つ
-	await expect.element(page.getByLabelText("名前")).not.toBeDisabled();
+	await expect.element(page.getByLabelText("姓")).not.toBeDisabled();
 
 	// 255文字のメールアドレスを入力（ローカル部分64文字 + @ + ドメイン部分190文字 = 255文字）
 
 	const longEmail = `${"a".repeat(64)}@${"example-".repeat(22)}example123.com`;
-	await page.getByLabelText("名前").fill("テスト太郎");
+	await page.getByLabelText("姓").fill("テスト");
+	await page.getByLabelText("名").fill("太郎");
 	await page.getByLabelText("メールアドレス").fill(longEmail);
 
 	// 送信ボタンをクリック
@@ -161,10 +190,11 @@ test("電話番号が21文字（最大値20文字を超える）場合、エラ�
 	render(<EditCustomerForm />);
 
 	// ハイドレーション完了を待つ
-	await expect.element(page.getByLabelText("名前")).not.toBeDisabled();
+	await expect.element(page.getByLabelText("姓")).not.toBeDisabled();
 
 	// 21文字の電話番号を入力（ハイフン込みで入力し、ハイフン除去後に21文字になる）
-	await page.getByLabelText("名前").fill("テスト太郎");
+	await page.getByLabelText("姓").fill("テスト");
+	await page.getByLabelText("名").fill("太郎");
 	await page.getByLabelText("電話番号").fill("012-3456-7890-1234567890");
 
 	// 送信ボタンをクリック

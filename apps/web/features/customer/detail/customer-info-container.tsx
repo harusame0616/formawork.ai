@@ -15,5 +15,10 @@ export async function CustomerInfoContainer({
 		notFound();
 	}
 
-	return <CustomerInfoPresenter name={customer.name} />;
+	return (
+		<CustomerInfoPresenter
+			firstName={customer.firstName}
+			lastName={customer.lastName}
+		/>
+	);
 }

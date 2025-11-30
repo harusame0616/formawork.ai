@@ -20,6 +20,7 @@
 			"Bash(pnpm -w validate:check)",
 			"Bash(pnpm -w validate:fix)",
 			"Bash(pnpm --filter:*)",
+			"Bash(git show:*)",
 			"Read(.env.sample)",
 			"Write(.env.sample)"
 		],

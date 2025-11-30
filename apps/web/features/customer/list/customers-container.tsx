@@ -11,12 +11,15 @@ export async function CustomersContainer({
 
 	return (
 		<CustomersPresenter
-			customers={customers.map(({ customerId, name, phone, email }) => ({
-				customerId,
-				email,
-				name,
-				phone,
-			}))}
+			customers={customers.map(
+				({ customerId, firstName, lastName, phone, email }) => ({
+					customerId,
+					email,
+					firstName,
+					lastName,
+					phone,
+				}),
+			)}
 			page={page}
 			totalPages={totalPages}
 		/>

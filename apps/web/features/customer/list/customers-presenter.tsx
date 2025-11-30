@@ -48,7 +48,7 @@ export function CustomersPresenter({
 									className="text-primary underline break-all"
 									href={`/customers/${customer.customerId}`}
 								>
-									{customer.name}
+									{customer.lastName} {customer.firstName}
 								</Link>
 							</TableCell>
 							<TableCell className="break-all">{customer.email}</TableCell>

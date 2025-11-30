@@ -57,7 +57,8 @@ const test = base.extend<{
 const validInput = {
 	customerId: "00000000-0000-0000-0000-000000000001",
 	email: "test@example.com",
-	name: "テスト太郎",
+	firstName: "太郎",
+	lastName: "テスト",
 	phone: "09012345678",
 };
 
