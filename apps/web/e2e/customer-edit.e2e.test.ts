@@ -8,7 +8,8 @@ type Fixtures = {
 	customer: {
 		customerId: string;
 		email: string;
-		name: string;
+		firstName: string;
+		lastName: string;
 		phone: string;
 	};
 	adminUserPage: Page;
@@ -38,7 +39,8 @@ const test = base.extend<Fixtures>({
 		const customer = {
 			customerId: v4(),
 			email: `${v4()}@example.com`,
-			name: v4().slice(0, 24),
+			firstName: v4().slice(0, 12),
+			lastName: v4().slice(0, 12),
 			phone: `${Math.floor(Math.random() * 1000000000)}`,
 		};
 
@@ -79,12 +81,16 @@ test("管理者が必須フィールドを全て入力して編集できる", as
 
 	const newCustomer = {
 		email: `${v4()}@example.com`,
-		name: v4().slice(0, 24),
+		firstName: v4().slice(0, 12),
+		lastName: v4().slice(0, 12),
 		phone: `${Math.floor(Math.random() * 1000000000)}`,
 	};
 	await test.step("顧客情報を編集", async () => {
-		await page.getByLabel("名前").clear();
-		await page.getByLabel("名前").fill(newCustomer.name);
+		await page.getByLabel("姓").clear();
+		await page.getByLabel("姓").fill(newCustomer.lastName);
+
+		await page.getByLabel("名").clear();
+		await page.getByLabel("名").fill(newCustomer.firstName);
 
 		await page.getByLabel("メールアドレス").clear();
 		await page.getByLabel("メールアドレス").fill(newCustomer.email);
@@ -101,7 +107,9 @@ test("管理者が必須フィールドを全て入力して編集できる", as
 
 	await test.step("編集内容が反映されていることを確認", async () => {
 		await expect(
-			page.getByRole("heading", { name: newCustomer.name }),
+			page.getByRole("heading", {
+				name: `${newCustomer.lastName} ${newCustomer.firstName}`,
+			}),
 		).toBeVisible();
 		await expect(page.getByText(newCustomer.email)).toBeVisible();
 		await expect(page.getByText(newCustomer.phone)).toBeVisible();

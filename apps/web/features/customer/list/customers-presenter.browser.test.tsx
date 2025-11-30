@@ -16,13 +16,15 @@ const mockCustomers: CustomersListItem[] = [
 	{
 		customerId: "1",
 		email: "customer1@example.com",
-		name: "顧客1",
+		firstName: "太郎",
+		lastName: "山田",
 		phone: "090-1234-5678",
 	},
 	{
 		customerId: "2",
 		email: "customer2@example.com",
-		name: "顧客2",
+		firstName: "花子",
+		lastName: "鈴木",
 		phone: "090-8765-4321",
 	},
 ];
@@ -32,8 +34,10 @@ test("顧客一覧が表示される", async () => {
 		<CustomersPresenter customers={mockCustomers} page={1} totalPages={1} />,
 	);
 
-	await expect.element(page.getByText("顧客1")).toBeInTheDocument();
-	await expect.element(page.getByText("顧客2")).toBeInTheDocument();
+	await expect.element(page.getByText("山田")).toBeInTheDocument();
+	await expect.element(page.getByText("太郎")).toBeInTheDocument();
+	await expect.element(page.getByText("鈴木")).toBeInTheDocument();
+	await expect.element(page.getByText("花子")).toBeInTheDocument();
 	await expect
 		.element(page.getByText("customer1@example.com"))
 		.toBeInTheDocument();

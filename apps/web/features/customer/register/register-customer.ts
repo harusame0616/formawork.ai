@@ -5,7 +5,8 @@ import { generateUniqueId } from "@/libs/generate-unique-id";
 import type { RegisterCustomerParams } from "./schema";
 
 export async function registerCustomer({
-	name,
+	firstName,
+	lastName,
 	email,
 	phone,
 }: RegisterCustomerParams): Promise<Success<{ customerId: string }>> {
@@ -14,7 +15,8 @@ export async function registerCustomer({
 	await db.insert(customersTable).values({
 		customerId,
 		email,
-		name,
+		firstName,
+		lastName,
 		phone,
 	});
 

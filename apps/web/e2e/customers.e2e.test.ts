@@ -1,4 +1,8 @@
+import { randomUUID } from "node:crypto";
 import { test as base, expect, type Page } from "@playwright/test";
+import { db } from "@workspace/db/client";
+import { customersTable } from "@workspace/db/schema/customer";
+import { eq } from "drizzle-orm";
 
 type CustomersPageFixture = {
 	customersPage: Page;
@@ -6,6 +10,10 @@ type CustomersPageFixture = {
 	testUser: {
 		email: string;
 		password: string;
+	};
+	searchPaginationCustomers: {
+		keyword: string;
+		count: number;
 	};
 };
 
@@ -31,6 +39,27 @@ const test = base.extend<CustomersPageFixture>({
 		).toBeHidden();
 
 		await use(authenticatedPage);
+	},
+	// biome-ignore lint/correctness/noEmptyPattern: fixtureの引数はオブジェクト分割が必要
+	searchPaginationCustomers: async ({}, use) => {
+		const keyword = randomUUID().slice(0, 8);
+		const count = 40;
+		const customers = Array.from({ length: count }, (_, i) => ({
+			customerId: randomUUID(),
+			email: `${keyword}-${i}@example.com`,
+			firstName: keyword,
+			lastName: `テスト${i}`,
+			phone: `0900000${String(i).padStart(4, "0")}`,
+		}));
+
+		await db.insert(customersTable).values(customers);
+
+		await use({ count, keyword });
+
+		// クリーンアップ
+		await db
+			.delete(customersTable)
+			.where(eq(customersTable.firstName, keyword));
 	},
 	testUser: [
 		{
@@ -159,55 +188,58 @@ test("ページネーションが正しく動作する", async ({ customersPage 
 
 test("検索とページネーションを組み合わせて使用できる", async ({
 	customersPage,
+	searchPaginationCustomers,
 }) => {
-	const searchKeyword = "example.com";
+	const { keyword } = searchPaginationCustomers;
 
-	await test.step("検索を実行", async () => {
-		// seedデータには複数の「example.com」のメールアドレスがある（25件）
-		await customersPage.getByLabel("キーワード").fill(searchKeyword);
+	await test.step("キーワードで検索して1ページ目を表示", async () => {
+		await customersPage.getByLabel("キーワード").fill(keyword);
 		await customersPage.getByRole("button", { name: "検索" }).click();
-		await customersPage.waitForURL("**/customers?keyword=*");
-	});
-
-	await test.step("1ページ目の検索結果を確認", async () => {
-		// Skeletonではなく実際のデータが表示されるまで待つ
+		await customersPage.waitForURL(`**/customers?keyword=${keyword}`);
 		await expect(
 			customersPage.getByRole("main").getByText("読み込み中"),
 		).toBeHidden();
 
-		// 表示されている全てのデータがキーワードを含んでいることを確認
+		// 1ページ目に20件表示されることを確認
 		const rows = customersPage.locator("table tbody tr");
 		await expect(rows).toHaveCount(20);
+
+		// 表示されている全てのデータがキーワードを含んでいることを確認
 		for (let i = 0; i < 20; i++) {
 			const row = rows.nth(i);
 			const text = await row.textContent();
-			expect(text).toContain(searchKeyword);
+			expect(text).toContain(keyword);
 		}
 	});
 
-	await test.step("検索結果の2ページ目に遷移", async () => {
+	await test.step("2ページ目に遷移", async () => {
 		await customersPage.getByRole("link", { name: /^2$/ }).click();
-		await customersPage.waitForURL("/customers?keyword=example.com&page=2");
-	});
-
-	await test.step("2ページ目の検索結果を確認", async () => {
-		// Skeletonではなく実際のデータが表示されるまで待つ
+		await customersPage.waitForURL(`**/customers?keyword=${keyword}&page=2`);
 		await expect(
 			customersPage.getByRole("main").getByText("読み込み中"),
 		).toBeHidden();
 
-		// 表示されている全てのデータがキーワードを含んでいることを確認
+		// 2ページ目に残り20件が表示されることを確認
 		const rows = customersPage.locator("table tbody tr");
-		const count = await rows.count();
-		for (let i = 0; i < count; i++) {
-			const row = rows.nth(i);
-			const text = await row.textContent();
-			expect(text).toContain(searchKeyword);
-		}
+		await expect(rows).toHaveCount(20);
+
+		// キーワードが保持されていることを確認
+		const searchInput = customersPage.getByLabel("キーワード");
+		await expect(searchInput).toHaveValue(keyword);
 	});
 
-	await test.step("キーワードが保持されていることを確認", async () => {
+	await test.step("「前へ」ボタンで1ページ目に戻れることを確認", async () => {
+		await customersPage.getByRole("link", { name: "前へ" }).click();
+		await customersPage.waitForURL(`**/customers?keyword=${keyword}&page=1`);
+		await expect(
+			customersPage.getByRole("main").getByText("読み込み中"),
+		).toBeHidden();
+
+		const rows = customersPage.locator("table tbody tr");
+		await expect(rows).toHaveCount(20);
+
+		// キーワードが保持されていることを確認
 		const searchInput = customersPage.getByLabel("キーワード");
-		await expect(searchInput).toHaveValue(searchKeyword);
+		await expect(searchInput).toHaveValue(keyword);
 	});
 });

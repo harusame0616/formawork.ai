@@ -1,6 +1,9 @@
 import { randomUUID } from "node:crypto";
 import path from "node:path";
 import { test as base, expect, type Page } from "@playwright/test";
+import { db } from "@workspace/db/client";
+import { customerNotesTable } from "@workspace/db/schema/customer-note";
+import { eq } from "drizzle-orm";
 
 type CustomerNotesPageFixture = {
 	customerNotesPage: Page;
@@ -35,7 +38,14 @@ const test = base.extend<CustomerNotesPageFixture>({
 test("正常系: 1文字（最小境界値）のノート登録成功", async ({
 	customerNotesPage,
 }) => {
-	const noteContent = "¥";
+	// ユニークな1文字を使用（テストの複数回実行で重複を避ける）
+	const noteContent = "§";
+
+	await test.step("既存の同一内容ノートを削除", async () => {
+		await db
+			.delete(customerNotesTable)
+			.where(eq(customerNotesTable.content, noteContent));
+	});
 
 	await test.step("ノート追加ダイアログを開く", async () => {
 		await customerNotesPage

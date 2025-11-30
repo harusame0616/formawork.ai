@@ -20,7 +20,8 @@ export async function CustomerEditFormContainer({
 			customerId={customer.customerId}
 			initialValues={{
 				email: customer.email,
-				name: customer.name,
+				firstName: customer.firstName,
+				lastName: customer.lastName,
 				phone: customer.phone,
 			}}
 		/>

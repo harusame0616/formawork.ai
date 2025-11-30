@@ -36,7 +36,8 @@ export function CustomersPresenter({
 			<Table>
 				<TableHeader>
 					<TableRow>
-						<TableHead>名前</TableHead>
+						<TableHead>姓</TableHead>
+						<TableHead>名</TableHead>
 						<TableHead>メールアドレス</TableHead>
 					</TableRow>
 				</TableHeader>
@@ -48,7 +49,15 @@ export function CustomersPresenter({
 									className="text-primary underline break-all"
 									href={`/customers/${customer.customerId}`}
 								>
-									{customer.name}
+									{customer.lastName}
+								</Link>
+							</TableCell>
+							<TableCell>
+								<Link
+									className="text-primary underline break-all"
+									href={`/customers/${customer.customerId}`}
+								>
+									{customer.firstName}
 								</Link>
 							</TableCell>
 							<TableCell className="break-all">{customer.email}</TableCell>

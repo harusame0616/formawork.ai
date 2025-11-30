@@ -16,12 +16,22 @@ export const emailSchema = v.union([
 		),
 	),
 ]);
-export const nameSchema = v.pipe(
-	v.string("名前を入力してください"),
-	v.minLength(1, "名前を入力してください"),
+
+export const lastNameSchema = v.pipe(
+	v.string("姓を入力してください"),
+	v.minLength(1, "姓を入力してください"),
 	v.maxLength(
 		CUSTOMER_NAME_MAX_LENGTH,
-		`名前は${CUSTOMER_NAME_MAX_LENGTH}文字以内で入力してください`,
+		`姓は${CUSTOMER_NAME_MAX_LENGTH}文字以内で入力してください`,
+	),
+);
+
+export const firstNameSchema = v.pipe(
+	v.string("名を入力してください"),
+	v.minLength(1, "名を入力してください"),
+	v.maxLength(
+		CUSTOMER_NAME_MAX_LENGTH,
+		`名は${CUSTOMER_NAME_MAX_LENGTH}文字以内で入力してください`,
 	),
 );
 export const phoneSchema = v.union([

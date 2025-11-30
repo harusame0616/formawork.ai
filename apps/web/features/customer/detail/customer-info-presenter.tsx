@@ -1,7 +1,15 @@
 type CustomerInfoPresenterProps = {
-	name: string;
+	firstName: string;
+	lastName: string;
 };
 
-export function CustomerInfoPresenter({ name }: CustomerInfoPresenterProps) {
-	return <h1 className="text-2xl font-bold h-9">{name}</h1>;
+export function CustomerInfoPresenter({
+	firstName,
+	lastName,
+}: CustomerInfoPresenterProps) {
+	return (
+		<h1 className="text-2xl font-bold h-9">
+			{lastName} {firstName}
+		</h1>
+	);
 }

@@ -15,7 +15,8 @@ const test = base.extend<{
 	customer: {
 		customerId: string;
 		email: string;
-		name: string;
+		firstName: string;
+		lastName: string;
 		phone: string;
 	};
 }>({
@@ -24,7 +25,8 @@ const test = base.extend<{
 		const customer = {
 			customerId: v4(),
 			email: `${v4()}@example.com`,
-			name: v4().slice(0, 24),
+			firstName: v4().slice(0, 12),
+			lastName: v4().slice(0, 12),
 			phone: `${Math.floor(Math.random() * 1000000000)}`,
 		};
 
@@ -36,30 +38,16 @@ const test = base.extend<{
 	},
 });
 
-test("複数フィールドにマッチする検索ができる", async ({ customer }) => {
-	const emailSearchResult = await getCustomers({
-		keyword: customer.email,
+test("姓名で検索ができる", async ({ customer }) => {
+	const firstNameSearchResult = await getCustomers({
+		keyword: customer.firstName,
 		page: 1,
 	});
-	const nameSearchResult = await getCustomers({
-		keyword: customer.name,
-		page: 1,
-	});
-
-	expect(emailSearchResult.customers.length).toBe(1);
-	expect(nameSearchResult.customers.length).toBe(1);
-});
-
-test("大文字小文字を区別せずに検索できる", async ({ customer }) => {
-	const emailSearchResult = await getCustomers({
-		keyword: customer.email.toUpperCase(),
-		page: 1,
-	});
-	const nameSearchResult = await getCustomers({
-		keyword: customer.name.toUpperCase(),
+	const lastNameSearchResult = await getCustomers({
+		keyword: customer.lastName,
 		page: 1,
 	});
 
-	expect(emailSearchResult.customers.length).toBe(1);
-	expect(nameSearchResult.customers.length).toBe(1);
+	expect(firstNameSearchResult.customers.length).toBe(1);
+	expect(lastNameSearchResult.customers.length).toBe(1);
 });

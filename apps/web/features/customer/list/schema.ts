@@ -36,7 +36,8 @@ export function parseCustomersConditionSearchParams(value: unknown) {
 
 export type CustomersListItem = {
 	customerId: string;
-	name: string;
+	firstName: string;
+	lastName: string;
 	phone: string;
 	email: string;
 };

@@ -39,7 +39,8 @@ export function EditCustomerForm(
 			? props.initialValues
 			: {
 					email: "",
-					name: "",
+					firstName: "",
+					lastName: "",
 					phone: "",
 				},
 		resolver: valibotResolver(registerCustomerSchema),
@@ -52,7 +53,8 @@ export function EditCustomerForm(
 			? await editCustomerAction({
 					customerId: props.customerId,
 					email: values.email,
-					name: values.name,
+					firstName: values.firstName,
+					lastName: values.lastName,
 					phone: values.phone,
 				})
 			: await registerCustomerAction(values);
@@ -81,17 +83,40 @@ export function EditCustomerForm(
 			>
 				<FormField
 					control={form.control}
-					name="name"
+					name="lastName"
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel className="flex items-center gap-2">
-								名前
+								姓
 								<RequiredBadge />
 							</FormLabel>
 							<FormDescription>24文字以内で入力してください</FormDescription>
 							<FormControl>
 								<Input
-									autoComplete="name"
+									autoComplete="family-name"
+									className="max-w-xs"
+									disabled={disabled}
+									type="text"
+									{...field}
+								/>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="firstName"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel className="flex items-center gap-2">
+								名
+								<RequiredBadge />
+							</FormLabel>
+							<FormDescription>24文字以内で入力してください</FormDescription>
+							<FormControl>
+								<Input
+									autoComplete="given-name"
 									className="max-w-xs"
 									disabled={disabled}
 									type="text"

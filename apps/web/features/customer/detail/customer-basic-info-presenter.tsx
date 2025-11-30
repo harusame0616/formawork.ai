@@ -5,7 +5,8 @@ type Customer = {
 	createdAt: Date;
 	customerId: string;
 	email: string | null;
-	name: string;
+	firstName: string;
+	lastName: string;
 	phone: string | null;
 	updatedAt: Date;
 };

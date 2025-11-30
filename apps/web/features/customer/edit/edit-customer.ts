@@ -11,7 +11,8 @@ const CUSTOMER_NOT_FOUND_ERROR_MESSAGE =
 export async function editCustomer({
 	customerId,
 	email,
-	name,
+	firstName,
+	lastName,
 	phone,
 }: EditCustomerParams): Promise<
 	Result<undefined, typeof CUSTOMER_NOT_FOUND_ERROR_MESSAGE>
@@ -33,7 +34,8 @@ export async function editCustomer({
 		.update(customersTable)
 		.set({
 			email,
-			name,
+			firstName,
+			lastName,
 			phone,
 		})
 		.where(eq(customersTable.customerId, customerId));

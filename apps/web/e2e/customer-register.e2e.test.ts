@@ -50,12 +50,14 @@ test("管理者が全フィールドを境界値一杯で入力して顧客を�
 }) => {
 	const testData = {
 		email: `${"a".repeat(64)}@${"example-".repeat(22)}example12.com`,
-		name: randomUUID().slice(0, 24),
+		firstName: randomUUID().slice(0, 12),
+		lastName: randomUUID().slice(0, 12),
 		phone: "012-3456-7890-123456789",
 	};
 
 	await test.step("フォームに境界値一杯のデータを入力", async () => {
-		await page.getByLabel("名前").fill(testData.name);
+		await page.getByLabel("姓").fill(testData.lastName);
+		await page.getByLabel("名").fill(testData.firstName);
 		await page.getByLabel("メールアドレス").fill(testData.email);
 		await page.getByLabel("電話番号").fill(testData.phone);
 	});
@@ -69,7 +71,9 @@ test("管理者が全フィールドを境界値一杯で入力して顧客を�
 	});
 
 	await test.step("登録した情報が正しく表示されることを確認", async () => {
-		await expect(page.getByText(testData.name)).toBeVisible();
+		await expect(
+			page.getByText(`${testData.lastName} ${testData.firstName}`),
+		).toBeVisible();
 
 		const emailLink = page.getByRole("link", {
 			name: testData.email,
@@ -90,13 +94,13 @@ test("管理者が全フィールドを境界値一杯で入力して顧客を�
 	});
 
 	await test.step("登録した顧客を検索", async () => {
-		await page.getByLabel("キーワード").fill(testData.name);
+		await page.getByLabel("キーワード").fill(testData.lastName);
 		await page.getByRole("button", { name: "検索" }).click();
 		await page.waitForURL("**/customers?keyword=*");
 	});
 
 	await test.step("検索結果に登録した顧客が表示されることを確認", async () => {
-		await expect(page.getByRole("link", { name: testData.name })).toBeVisible();
+		await expect(page.getByText(testData.lastName)).toBeVisible();
 	});
 });
 
@@ -104,11 +108,13 @@ test("管理者が必須フィールドのみ入力して登録でき、詳細�
 	adminUserPage: page,
 }) => {
 	const testData = {
-		name: randomUUID().slice(0, 24),
+		firstName: randomUUID().slice(0, 12),
+		lastName: randomUUID().slice(0, 12),
 	};
 
-	await test.step("必須フィールド（名前）のみ入力", async () => {
-		await page.getByLabel("名前").fill(testData.name);
+	await test.step("必須フィールド（姓名）のみ入力", async () => {
+		await page.getByLabel("姓").fill(testData.lastName);
+		await page.getByLabel("名").fill(testData.firstName);
 	});
 
 	await test.step("登録ボタンをクリック", async () => {
@@ -120,7 +126,9 @@ test("管理者が必須フィールドのみ入力して登録でき、詳細�
 	});
 
 	await test.step("登録した情報が正しく表示されることを確認", async () => {
-		await expect(page.getByText(testData.name)).toBeVisible();
+		await expect(
+			page.getByText(`${testData.lastName} ${testData.firstName}`),
+		).toBeVisible();
 		await expect(page.getByText("未登録")).toHaveCount(2);
 	});
 });

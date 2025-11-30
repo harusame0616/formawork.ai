@@ -1,10 +1,16 @@
 import * as v from "valibot";
-import { emailSchema, nameSchema, phoneSchema } from "../schema";
+import {
+	emailSchema,
+	firstNameSchema,
+	lastNameSchema,
+	phoneSchema,
+} from "../schema";
 
 export const editCustomerSchema = v.object({
 	customerId: v.pipe(v.string(), v.uuid()),
 	email: emailSchema,
-	name: nameSchema,
+	firstName: firstNameSchema,
+	lastName: lastNameSchema,
 	phone: phoneSchema,
 });
 
