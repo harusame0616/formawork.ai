@@ -17,6 +17,20 @@
 		"next-devtools": {
 			"args": ["-y", "next-devtools-mcp@latest"],
 			"command": "npx"
+		},
+		"serena": {
+			"args": [
+				"--from",
+				"git+https://github.com/oraios/serena",
+				"serena-mcp-server",
+				"--context",
+				"ide-assistant",
+				"--project",
+				"./"
+			],
+			"command": "uvx",
+			"env": {},
+			"type": "stdio"
 		}
 	}
 }
