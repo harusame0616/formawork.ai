@@ -68,8 +68,13 @@ test("スタッフ一覧が表示される", async ({ staffsPage }) => {
 	});
 
 	await test.step("姓、名とメールアドレスが表示されていることを確認", async () => {
-		await expect(staffsPage.getByRole("cell", { name: "田中" })).toBeVisible();
-		await expect(staffsPage.getByRole("cell", { name: "太郎" })).toBeVisible();
+		const targetRow = staffsPage
+			.locator("table tbody tr")
+			.filter({ hasText: "田中" })
+			.filter({ hasText: "太郎" });
+		await expect(targetRow).toBeVisible();
+		await expect(targetRow.getByRole("cell", { name: "田中" })).toBeVisible();
+		await expect(targetRow.getByRole("cell", { name: "太郎" })).toBeVisible();
 	});
 });
 
