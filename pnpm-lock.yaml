@@ -290,7 +290,7 @@ importers:
   packages/logger:
     dependencies:
       next:
-        specifier: '>=15.0.0'
+        specifier: 'catalog:'
         version: 16.0.1(@babel/core@7.28.5)(@playwright/test@1.56.1)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       pino:
         specifier: 'catalog:'
