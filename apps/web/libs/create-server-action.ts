@@ -68,19 +68,7 @@ type ServerActionErrorMessage =
 	| typeof FORBIDDEN_ERROR_MESSAGE
 	| typeof INTERNAL_SERVER_ERROR_MESSAGE;
 
-// schema なしの場合（引数なし）
-export function createServerAction<TData, TError extends string>(
-	logicFunc: (
-		input: undefined,
-		context: ServerActionContext,
-	) => Promise<Result<TData, TError>>,
-	options: Omit<
-		ServerActionOptions<v.UndefinedSchema<undefined>, TData, TError>,
-		"schema"
-	>,
-): () => Promise<Result<TData, TError | ServerActionErrorMessage>>;
-
-// schema ありの場合（引数あり）
+// schema ありの場合（引数あり）- より特定的なので先に配置
 export function createServerAction<
 	TSchema extends v.GenericSchema,
 	TData,
@@ -94,6 +82,18 @@ export function createServerAction<
 ): (
 	input: v.InferInput<TSchema>,
 ) => Promise<Result<TData, TError | ServerActionErrorMessage>>;
+
+// schema なしの場合（引数なし）
+export function createServerAction<TData, TError extends string>(
+	logicFunc: (
+		input: undefined,
+		context: ServerActionContext,
+	) => Promise<Result<TData, TError>>,
+	options: Omit<
+		ServerActionOptions<v.UndefinedSchema<undefined>, TData, TError>,
+		"schema"
+	>,
+): () => Promise<Result<TData, TError | ServerActionErrorMessage>>;
 
 // 実装
 export function createServerAction<
