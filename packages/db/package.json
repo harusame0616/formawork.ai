@@ -8,7 +8,6 @@
 		"@types/node": "catalog:",
 		"@workspace/tsconfig": "workspace:",
 		"drizzle-kit": "catalog:",
-		"drizzle-seed": "catalog:",
 		"tsx": "catalog:",
 		"typescript": "catalog:"
 	},

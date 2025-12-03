@@ -19,7 +19,7 @@
 		"test:browser": "pnpm --filter web test:browser",
 		"test:e2e": "pnpm --filter web test:e2e",
 		"test:server": "pnpm --filter web test:server",
-		"validate:check": "biome check . && knip && cspell . && pnpm -r type:check",
-		"validate:fix": "biome check --write . && knip --fix --allow-remove-files"
+		"validate:check": "biome check . && DATABASE_URL=postgres://dummy:dummy@localhost:5432/dummy knip && cspell . && pnpm -r type:check",
+		"validate:fix": "biome check --write . && DATABASE_URL=postgres://dummy:dummy@localhost:5432/dummy knip --fix --allow-remove-files"
 	}
 }
