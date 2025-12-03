@@ -1,4 +1,4 @@
-/** biome-ignore-all lint/complexity/useLiteralKeys: <explanation> */
+/** biome-ignore-all lint/complexity/useLiteralKeys: ts(4111) */
 import * as v from "valibot";
 
 export const schemaName = v.parse(
