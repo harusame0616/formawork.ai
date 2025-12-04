@@ -19,7 +19,7 @@ export async function POST(request: Request) {
 			return NextResponse.json({ error: error.message }, { status: 400 });
 		}
 		// Redirect back to the client with authorization code
-		return NextResponse.redirect(data.redirect_to);
+		return NextResponse.redirect(data.redirect_url);
 	} else {
 		const { data, error } =
 			await supabase.auth.oauth.denyAuthorization(authorizationId);
@@ -27,6 +27,6 @@ export async function POST(request: Request) {
 			return NextResponse.json({ error: error.message }, { status: 400 });
 		}
 		// Redirect back to the client with error
-		return NextResponse.redirect(data.redirect_to);
+		return NextResponse.redirect(data.redirect_url);
 	}
 }

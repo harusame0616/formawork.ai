@@ -33,28 +33,12 @@ export default async function ConsentPage({
 			<div>Error: {error?.message || "Invalid authorization request"}</div>
 		);
 	}
+	console.log({ authDetails });
 	return (
 		<div>
-			<h1>Authorize {authDetails.client.name}</h1>
+			<h1>Authorize {JSON.stringify(authDetails.user)}</h1>
 			<p>This application wants to access your account.</p>
-			<div>
-				<p>
-					<strong>Client:</strong> {authDetails.client.name}
-				</p>
-				<p>
-					<strong>Redirect URI:</strong> {authDetails.redirect_uri}
-				</p>
-				{authDetails.scopes && authDetails.scopes.length > 0 && (
-					<div>
-						<strong>Requested permissions:</strong>
-						<ul>
-							{authDetails.scopes.map((scope) => (
-								<li key={scope}>{scope}</li>
-							))}
-						</ul>
-					</div>
-				)}
-			</div>
+			<div>{authDetails.scope}</div>
 			<form action="/api/oauth/decision" method="POST">
 				<input name="authorization_id" type="hidden" value={authorizationId} />
 				<button name="decision" type="submit" value="approve">
