@@ -1,11 +1,24 @@
 import { defineConfig } from "drizzle-kit";
-import { databaseUrl } from "./src/client";
+import * as v from "valibot";
 import { schemaName } from "./src/pgschema";
+
+const directUrl = new URL(
+	v.parse(
+		v.pipe(
+			v.string("directUrl は文字列である必要があります"),
+			v.nonEmpty("directUrl は1文字以上である必要があります"),
+			v.url("directUrl は URL である必要があります"),
+		),
+		// biome-ignore lint/complexity/useLiteralKeys: ts4111
+		process.env["DIRECT_URL"],
+	),
+);
+directUrl.searchParams.set("search_path", schemaName);
 
 export default defineConfig({
 	breakpoints: false,
 	dbCredentials: {
-		url: databaseUrl.toString(),
+		url: directUrl.toString(),
 	},
 	dialect: "postgresql",
 	migrations: {
@@ -16,9 +29,9 @@ export default defineConfig({
 });
 
 console.log("drizzle kig config", {
-	databaseHost: databaseUrl.hostname,
-	databaseName: databaseUrl.pathname,
-	databasePort: databaseUrl.port,
-	databaseSearchParams: databaseUrl.searchParams,
+	databaseHost: directUrl.hostname,
+	databaseName: directUrl.pathname,
+	databasePort: directUrl.port,
+	databaseSearchParams: directUrl.searchParams,
 	schemaName,
 });

@@ -5,5 +5,5 @@
 	},
 	"exclude": ["node_modules", "dist"],
 	"extends": "@workspace/tsconfig/base.json",
-	"include": ["src/**/*"]
+	"include": ["src/**/*", "drizzle.config.ts"]
 }

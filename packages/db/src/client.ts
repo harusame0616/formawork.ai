@@ -5,7 +5,7 @@ import * as v from "valibot";
 import { schemaName } from "./pgschema";
 import * as schema from "./schema";
 
-export const databaseUrl = new URL(
+const databaseUrl = new URL(
 	v.parse(
 		v.pipe(
 			v.string("databaseUrl は文字列である必要があります"),
