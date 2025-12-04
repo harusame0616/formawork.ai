@@ -140,6 +140,9 @@ minimum_password_length = 6
 # Passwords that do not meet the following requirements will be rejected as weak. Supported values
 # are: `letters_digits`, `lower_upper_letters_digits`, `lower_upper_letters_digits_symbols`
 password_requirements = ""
+# OAuth フローをローカルで試す場合にトンネルソリューション（Cloudflare Tunnel など）を使う場合にトンネル URL と一致するようにする
+# https://supabase.com/docs/guides/auth/oauth-server/getting-started?queryGroups=oauth-setup&oauth-setup=cli#expose-local-instance-to-the-world
+# jwt_issuer = "https://example"
 
 [auth.rate_limit]
 # Number of emails that can be sent per hour. Requires auth.email.smtp to be enabled.
@@ -300,6 +303,11 @@ enabled = false
 enabled = false
 # Obtain from https://clerk.com/setup/supabase
 # domain = "example.clerk.accounts.dev"
+
+[auth.oauth_server]
+enabled = true
+authorization_url_path = "/oauth/consent"
+allow_dynamic_registration = false  # Optional: enable dynamic client registration
 
 [edge_runtime]
 enabled = false
