@@ -5,7 +5,7 @@ import { schemaName } from "./src/pgschema";
 export default defineConfig({
 	breakpoints: false,
 	dbCredentials: {
-		url: `${databaseUrl}?search_path=${schemaName}`,
+		url: databaseUrl.toString(),
 	},
 	dialect: "postgresql",
 	migrations: {
@@ -15,4 +15,10 @@ export default defineConfig({
 	schema: "./src/schema/index.ts",
 });
 
-console.log("Drizzle kig Config", { schemaName });
+console.log("drizzle kig config", {
+	databaseHost: databaseUrl.hostname,
+	databaseName: databaseUrl.pathname,
+	databasePort: databaseUrl.port,
+	databaseSearchParams: databaseUrl.searchParams,
+	schemaName,
+});
