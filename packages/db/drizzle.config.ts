@@ -13,7 +13,12 @@ const directUrl = new URL(
 		process.env["DIRECT_URL"],
 	),
 );
-directUrl.searchParams.set("schema", schemaName);
+// SUPABASE の session pooler では schema、直接接続の場合は search_path を使うため、
+// schemaName が public かどうかでリモートかローカル化を判定してパラメーター名を修正
+directUrl.searchParams.set(
+	schemaName === "public" ? "search_path" : "schema",
+	schemaName,
+);
 
 export default defineConfig({
 	breakpoints: false,
