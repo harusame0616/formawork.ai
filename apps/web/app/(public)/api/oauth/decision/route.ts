@@ -18,15 +18,15 @@ export async function POST(request: Request) {
 		if (error) {
 			return NextResponse.json({ error: error.message }, { status: 400 });
 		}
-		// Redirect back to the client with authorization code
-		return NextResponse.redirect(data.redirect_url);
+		// Redirect back to the client with authorization code (303 to change POST to GET)
+		return NextResponse.redirect(data.redirect_url, 303);
 	} else {
 		const { data, error } =
 			await supabase.auth.oauth.denyAuthorization(authorizationId);
 		if (error) {
 			return NextResponse.json({ error: error.message }, { status: 400 });
 		}
-		// Redirect back to the client with error
-		return NextResponse.redirect(data.redirect_url);
+		// Redirect back to the client with error (303 to change POST to GET)
+		return NextResponse.redirect(data.redirect_url, 303);
 	}
 }
