@@ -1,9 +1,10 @@
 "use client";
 
 import { Button } from "@workspace/ui/components/button";
-import { ImageIcon, Loader2, X } from "lucide-react";
+import { ImageIcon, X } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useRef } from "react";
+import { LoadingIcon } from "@/components/loading-icon";
 import type { UploadingImage } from "../register/use-image-upload";
 
 type CustomerNoteImageInputProps = {
@@ -84,7 +85,7 @@ export function CustomerNoteImageInput({
 							{/* ステータスオーバーレイ */}
 							{image.status === "uploading" && (
 								<div className="bg-background/80 absolute inset-0 flex items-center justify-center rounded-md">
-									<Loader2 className="text-primary h-5 w-5 animate-spin" />
+									<LoadingIcon className="text-primary size-5" />
 								</div>
 							)}
 							{image.status === "error" && (

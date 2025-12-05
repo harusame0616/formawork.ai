@@ -12,10 +12,10 @@ import {
 	FormMessage,
 } from "@workspace/ui/components/form";
 import { Input } from "@workspace/ui/components/input";
-import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { LoadingIcon } from "@/components/loading-icon";
 import { useIsHydrated } from "@/libs/use-is-hydrated";
 import { changePasswordAction } from "./change-password-action";
 import { type ChangePasswordParams, changePasswordSchema } from "./schema";
@@ -113,7 +113,7 @@ export function ChangePasswordForm({ disabled }: { disabled?: boolean }) {
 					<Button disabled={isDisabled} type="submit">
 						{isPending ? (
 							<>
-								<Loader2 className="mr-2 size-4 animate-spin" />
+								<LoadingIcon className="mr-2" />
 								変更中...
 							</>
 						) : (

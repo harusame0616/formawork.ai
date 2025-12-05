@@ -10,9 +10,10 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@workspace/ui/components/dialog";
-import { AlertCircle, Loader2, Trash2 } from "lucide-react";
+import { AlertCircle, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import { LoadingIcon } from "@/components/loading-icon";
 import { deleteCustomerNoteAction } from "./delete-customer-note-action";
 
 type DeleteCustomerNoteDialogProps = {
@@ -92,8 +93,8 @@ export function DeleteCustomerNoteDialog({
 					>
 						{isPending ? (
 							<>
+								<LoadingIcon className="mr-2" />
 								削除中
-								<Loader2 className="ml-2 size-4 animate-spin" />
 							</>
 						) : (
 							"削除"

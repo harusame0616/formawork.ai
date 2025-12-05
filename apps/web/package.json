@@ -10,6 +10,7 @@
 		"lucide-react": "catalog:",
 		"mcp-handler": "catalog:",
 		"next": "catalog:",
+		"pino": "catalog:",
 		"react": "catalog:",
 		"react-dom": "catalog:",
 		"react-hook-form": "catalog:",
@@ -18,7 +19,7 @@
 		"zod": "catalog:"
 	},
 	"devDependencies": {
-		"@playwright/test": "^1.56.1",
+		"@playwright/test": "catalog:",
 		"@supabase/supabase-js": "catalog:",
 		"@tailwindcss/postcss": "catalog:",
 		"@types/node": "catalog:",
