@@ -48,6 +48,8 @@ async function ConsentContent({
 		);
 	}
 
+	console.log("OAuth authDetails:", JSON.stringify(authDetails, null, 2));
+
 	return (
 		<div>
 			<h1>Authorize {JSON.stringify(authDetails.user)}</h1>
