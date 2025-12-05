@@ -105,7 +105,7 @@ test("送信中はボタンが無効化され、ローディング表示にな�
 	const button = page.getByRole("button", { name: /変更中/ });
 
 	await expect.element(button).toBeDisabled();
-	await expect.element(page.getByText("変更中...")).toBeInTheDocument();
+	await expect.element(page.getByText("変更中")).toBeInTheDocument();
 });
 
 test("現在のパスワードが64文字を超える場合、エラーが表示される", async ({
