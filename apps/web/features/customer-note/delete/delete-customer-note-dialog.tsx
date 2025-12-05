@@ -13,7 +13,6 @@ import {
 import { AlertCircle, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { LoadingIcon } from "@/components/loading-icon";
 import { deleteCustomerNoteAction } from "./delete-customer-note-action";
 
 type DeleteCustomerNoteDialogProps = {
@@ -86,19 +85,13 @@ export function DeleteCustomerNoteDialog({
 					</Button>
 					<Button
 						className="min-w-[120px]"
-						disabled={isPending}
+						isProcessing={isPending}
 						onClick={handleDelete}
+						processingLabel="削除中"
 						type="button"
 						variant="destructive"
 					>
-						{isPending ? (
-							<>
-								<LoadingIcon className="mr-2" />
-								削除中
-							</>
-						) : (
-							"削除"
-						)}
+						削除
 					</Button>
 				</DialogFooter>
 			</DialogContent>

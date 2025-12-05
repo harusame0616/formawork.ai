@@ -12,7 +12,6 @@ import {
 } from "@workspace/ui/components/dialog";
 import { AlertCircle, Trash2 } from "lucide-react";
 import { useState, useTransition } from "react";
-import { LoadingIcon } from "@/components/loading-icon";
 import { deleteStaffAction } from "./delete-staff-action";
 
 type DeleteStaffDialogProps = {
@@ -90,19 +89,13 @@ export function DeleteStaffDialog({ staffId }: DeleteStaffDialogProps) {
 					</Button>
 					<Button
 						className="min-w-[120px]"
-						disabled={isPending}
+						isProcessing={isPending}
 						onClick={handleDelete}
+						processingLabel="削除中"
 						type="button"
 						variant="destructive"
 					>
-						{isPending ? (
-							<>
-								<LoadingIcon className="mr-2" />
-								削除中
-							</>
-						) : (
-							"削除"
-						)}
+						削除
 					</Button>
 				</DialogFooter>
 			</DialogContent>

@@ -15,7 +15,6 @@ import { Input } from "@workspace/ui/components/input";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { LoadingIcon } from "@/components/loading-icon";
 import { useIsHydrated } from "@/libs/use-is-hydrated";
 import { changePasswordAction } from "./change-password-action";
 import { type ChangePasswordParams, changePasswordSchema } from "./schema";
@@ -110,15 +109,13 @@ export function ChangePasswordForm({ disabled }: { disabled?: boolean }) {
 					>
 						キャンセル
 					</Button>
-					<Button disabled={isDisabled} type="submit">
-						{isPending ? (
-							<>
-								<LoadingIcon className="mr-2" />
-								変更中...
-							</>
-						) : (
-							"パスワードを変更"
-						)}
+					<Button
+						disabled={isDisabled}
+						isProcessing={isPending}
+						processingLabel="変更中"
+						type="submit"
+					>
+						パスワードを変更
 					</Button>
 				</div>
 			</form>

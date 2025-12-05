@@ -12,7 +12,6 @@ import {
 } from "@workspace/ui/components/form";
 import { Input } from "@workspace/ui/components/input";
 import { useForm } from "react-hook-form";
-import { LoadingIcon } from "@/components/loading-icon";
 import { type LoginParams, loginSchema } from "@/features/auth/login/schema";
 import { useIsHydrated } from "@/libs/use-is-hydrated";
 import { defaultPassword, defaultUserName } from "./default-user";
@@ -87,17 +86,12 @@ export function LoginForm() {
 				)}
 				<Button
 					className="w-full"
-					disabled={form.formState.isSubmitting || !isHydrated}
+					disabled={!isHydrated}
+					isProcessing={form.formState.isSubmitting}
+					processingLabel="ログイン中"
 					type="submit"
 				>
-					{form.formState.isSubmitting ? (
-						<>
-							<LoadingIcon className="mr-2" />
-							ログイン中
-						</>
-					) : (
-						"ログイン"
-					)}
+					ログイン
 				</Button>
 				<div className="text-center text-sm text-muted-foreground">
 					アカウントがない場合、パスワードを忘れた場合は管理者にお問い合わせください。

@@ -28,7 +28,6 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as v from "valibot";
-import { LoadingIcon } from "@/components/loading-icon";
 import { CustomerNoteImageInput } from "@/features/customer-note/list/customer-note-image-input";
 import type { CustomerNoteImageWithUrl } from "@/features/customer-note/list/get-customer-notes";
 import { useImageUpload } from "@/features/customer-note/register/use-image-upload";
@@ -308,17 +307,11 @@ export function EditCustomerNoteDialog({
 							</Button>
 							<Button
 								className="min-w-[120px]"
-								disabled={isProcessing}
+								isProcessing={isProcessing}
+								processingLabel={isUploading ? "アップロード中" : "更新中"}
 								type="submit"
 							>
-								{isProcessing ? (
-									<>
-										<LoadingIcon className="mr-2" />
-										{isUploading ? "アップロード中" : "更新中"}
-									</>
-								) : (
-									"更新"
-								)}
+								更新
 							</Button>
 						</DialogFooter>
 					</form>

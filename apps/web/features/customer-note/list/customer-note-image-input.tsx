@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@workspace/ui/components/button";
+import { LoadingIcon } from "@workspace/ui/components/loading-icon";
 import { ImageIcon, X } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useRef } from "react";
-import { LoadingIcon } from "@/components/loading-icon";
 import type { UploadingImage } from "../register/use-image-upload";
 
 type CustomerNoteImageInputProps = {

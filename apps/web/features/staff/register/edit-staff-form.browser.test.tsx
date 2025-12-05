@@ -129,7 +129,7 @@ test("送信中はボタンが無効化され、ローディング表示にな�
 	const button = page.getByRole("button", { name: /登録中/ });
 
 	await expect.element(button).toBeDisabled();
-	await expect.element(page.getByText("登録中...")).toBeInTheDocument();
+	await expect.element(page.getByText("登録中")).toBeInTheDocument();
 });
 
 test("登録エラー時にエラーメッセージが表示される", async ({

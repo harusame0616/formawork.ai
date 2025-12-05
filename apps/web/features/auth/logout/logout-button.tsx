@@ -2,7 +2,6 @@
 
 import { Button } from "@workspace/ui/components/button";
 import { useTransition } from "react";
-import { LoadingIcon } from "@/components/loading-icon";
 import { logoutAction } from "./logout-action";
 
 export function LogoutButton() {
@@ -17,11 +16,11 @@ export function LogoutButton() {
 	return (
 		<Button
 			className="w-full justify-start"
-			disabled={isPending}
+			isProcessing={isPending}
 			onClick={handleOnClick}
+			processingLabel="ログアウト中"
 			variant="ghost"
 		>
-			{isPending && <LoadingIcon className="mr-2" />}
 			ログアウト
 		</Button>
 	);
