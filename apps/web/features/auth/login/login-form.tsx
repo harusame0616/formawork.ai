@@ -92,8 +92,8 @@ export function LoginForm() {
 				>
 					{form.formState.isSubmitting ? (
 						<>
+							<LoadingIcon className="mr-2" />
 							ログイン中
-							<LoadingIcon />
 						</>
 					) : (
 						"ログイン"

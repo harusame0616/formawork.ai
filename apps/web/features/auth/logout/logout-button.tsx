@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@workspace/ui/components/button";
-import { Loader2 } from "lucide-react";
 import { useTransition } from "react";
+import { LoadingIcon } from "@/components/loading-icon";
 import { logoutAction } from "./logout-action";
 
 export function LogoutButton() {
@@ -21,7 +21,7 @@ export function LogoutButton() {
 			onClick={handleOnClick}
 			variant="ghost"
 		>
-			{isPending && <Loader2 className="animate-spin" />}
+			{isPending && <LoadingIcon className="mr-2" />}
 			ログアウト
 		</Button>
 	);

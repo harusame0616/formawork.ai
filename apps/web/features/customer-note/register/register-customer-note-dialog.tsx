@@ -22,11 +22,12 @@ import {
 import { OptionalBadge } from "@workspace/ui/components/optional-badge";
 import { RequiredBadge } from "@workspace/ui/components/required-badge";
 import { Textarea } from "@workspace/ui/components/textarea";
-import { AlertCircle, Loader2, Plus } from "lucide-react";
+import { AlertCircle, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as v from "valibot";
+import { LoadingIcon } from "@/components/loading-icon";
 import { CustomerNoteImageInput } from "../list/customer-note-image-input";
 import { registerCustomerNoteAction } from "./register-customer-note-action";
 import { useImageUpload } from "./use-image-upload";
@@ -234,8 +235,8 @@ export function RegisterCustomerNoteDialog({
 							>
 								{isProcessing ? (
 									<>
+										<LoadingIcon className="mr-2" />
 										{isUploading ? "アップロード中" : "登録中"}
-										<Loader2 className="ml-2 size-4 animate-spin" />
 									</>
 								) : (
 									"登録"

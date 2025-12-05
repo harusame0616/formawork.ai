@@ -18,9 +18,9 @@ import {
 	RadioGroupItem,
 } from "@workspace/ui/components/radio-group";
 import { RequiredBadge } from "@workspace/ui/components/required-badge";
-import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { LoadingIcon } from "@/components/loading-icon";
 import { UserRole } from "@/features/auth/user/role";
 import { useIsHydrated } from "@/libs/use-is-hydrated";
 import { registerStaffAction } from "./register-staff-action";
@@ -223,7 +223,7 @@ export function EditStaffForm({ disabled: disabledProp }: EditStaffFormProps) {
 					<Button className="min-w-[120px]" disabled={disabled} type="submit">
 						{form.formState.isSubmitting ? (
 							<>
-								<Loader2 className="mr-2 size-4 animate-spin" />
+								<LoadingIcon className="mr-2" />
 								登録中...
 							</>
 						) : (
