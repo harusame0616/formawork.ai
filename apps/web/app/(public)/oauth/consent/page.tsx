@@ -42,25 +42,62 @@ async function ConsentContent({
 	const { data: authDetails, error } =
 		await supabase.auth.oauth.getAuthorizationDetails(authorizationId);
 
+	console.log("OAuth authDetails:", JSON.stringify(authDetails, null, 2));
+
 	if (error || !authDetails) {
 		return (
 			<div>Error: {error?.message || "Invalid authorization request"}</div>
 		);
 	}
 
-	console.log("OAuth authDetails:", JSON.stringify(authDetails, null, 2));
+	async function approveAction() {
+		"use server";
+		const supabase = await createClient();
+		const { data, error } = await supabase.auth.oauth.approveAuthorization(
+			authorizationId!,
+		);
+
+		if (error) {
+			console.error("OAuth approve error (server action):", {
+				authorizationId,
+				error: {
+					code: error.code,
+					message: error.message,
+					status: error.status,
+				},
+			});
+			throw new Error(error.message);
+		}
+
+		console.log("OAuth approve success:", data);
+		redirect(data.redirect_url);
+	}
+
+	async function denyAction() {
+		"use server";
+		const supabase = await createClient();
+		const { data, error } = await supabase.auth.oauth.denyAuthorization(
+			authorizationId!,
+		);
+
+		if (error) {
+			console.error("OAuth deny error (server action):", error);
+			throw new Error(error.message);
+		}
+
+		redirect(data.redirect_url);
+	}
 
 	return (
 		<div>
 			<h1>Authorize {JSON.stringify(authDetails.user)}</h1>
 			<p>This application wants to access your account.</p>
 			<div>{authDetails.scope}</div>
-			<form action="/api/oauth/decision" method="POST">
-				<input name="authorization_id" type="hidden" value={authorizationId} />
-				<button name="decision" type="submit" value="approve">
+			<form>
+				<button formAction={approveAction} type="submit">
 					Approve
 				</button>
-				<button name="decision" type="submit" value="deny">
+				<button formAction={denyAction} type="submit">
 					Deny
 				</button>
 			</form>
