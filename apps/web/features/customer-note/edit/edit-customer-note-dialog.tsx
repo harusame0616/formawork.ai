@@ -22,12 +22,13 @@ import {
 import { OptionalBadge } from "@workspace/ui/components/optional-badge";
 import { RequiredBadge } from "@workspace/ui/components/required-badge";
 import { Textarea } from "@workspace/ui/components/textarea";
-import { AlertCircle, Edit, Loader2, X } from "lucide-react";
+import { AlertCircle, Edit, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as v from "valibot";
+import { LoadingIcon } from "@/components/loading-icon";
 import { CustomerNoteImageInput } from "@/features/customer-note/list/customer-note-image-input";
 import type { CustomerNoteImageWithUrl } from "@/features/customer-note/list/get-customer-notes";
 import { useImageUpload } from "@/features/customer-note/register/use-image-upload";
@@ -312,8 +313,8 @@ export function EditCustomerNoteDialog({
 							>
 								{isProcessing ? (
 									<>
+										<LoadingIcon className="mr-2" />
 										{isUploading ? "アップロード中" : "更新中"}
-										<Loader2 className="ml-2 size-4 animate-spin" />
 									</>
 								) : (
 									"更新"

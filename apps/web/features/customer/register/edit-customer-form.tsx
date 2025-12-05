@@ -14,9 +14,9 @@ import {
 import { Input } from "@workspace/ui/components/input";
 import { OptionalBadge } from "@workspace/ui/components/optional-badge";
 import { RequiredBadge } from "@workspace/ui/components/required-badge";
-import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { LoadingIcon } from "@/components/loading-icon";
 import { editCustomerAction } from "@/features/customer/edit/edit-customer-action";
 import { useIsHydrated } from "@/libs/use-is-hydrated";
 import type { EditCustomerParams } from "../edit/schema";
@@ -193,8 +193,8 @@ export function EditCustomerForm(
 						<Button className="min-w-[120px]" disabled={disabled} type="submit">
 							{form.formState.isSubmitting ? (
 								<>
+									<LoadingIcon className="mr-2" />
 									編集中
-									<Loader2 className="ml-2 size-4 animate-spin" />
 								</>
 							) : (
 								"編集する"
@@ -204,7 +204,7 @@ export function EditCustomerForm(
 						<Button className="min-w-[120px]" disabled={disabled} type="submit">
 							{form.formState.isSubmitting ? (
 								<>
-									<Loader2 className="mr-2 size-4 animate-spin" />
+									<LoadingIcon className="mr-2" />
 									登録中...
 								</>
 							) : (
