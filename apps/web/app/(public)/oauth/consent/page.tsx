@@ -1,13 +1,28 @@
-// app/oauth/consent/page.tsx
 import { createClient } from "@repo/supabase/nextjs/server";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
-export default async function ConsentPage({
+export default function ConsentPage({
 	searchParams,
 }: {
 	searchParams: Promise<{ authorization_id?: string }>;
 }) {
-	const { authorization_id: authorizationId } = await searchParams;
+	const authorizationIdPromise = searchParams.then((sp) => sp.authorization_id);
+
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<ConsentContent authorizationIdPromise={authorizationIdPromise} />
+		</Suspense>
+	);
+}
+
+async function ConsentContent({
+	authorizationIdPromise,
+}: {
+	authorizationIdPromise: Promise<string | undefined>;
+}) {
+	const authorizationId = await authorizationIdPromise;
+
 	if (!authorizationId) {
 		return <div>Error: Missing authorization_id</div>;
 	}
@@ -19,12 +34,11 @@ export default async function ConsentPage({
 	} = await supabase.auth.getUser();
 
 	if (!user) {
-		// Redirect to login, preserving authorization_id
 		redirect(
 			`/login?redirect=/oauth/consent?authorization_id=${authorizationId}`,
 		);
 	}
-	// Get authorization details using the authorization_id
+
 	const { data: authDetails, error } =
 		await supabase.auth.oauth.getAuthorizationDetails(authorizationId);
 
@@ -33,7 +47,7 @@ export default async function ConsentPage({
 			<div>Error: {error?.message || "Invalid authorization request"}</div>
 		);
 	}
-	console.log({ authDetails });
+
 	return (
 		<div>
 			<h1>Authorize {JSON.stringify(authDetails.user)}</h1>
