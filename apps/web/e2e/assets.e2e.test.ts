@@ -5,7 +5,7 @@ const staticAssets = [
 	"/manifest.webmanifest",
 	"/icon-192x192.png",
 	"/icon-512x512.png",
-	"/apple-touch-icon.png",
+	"/apple-icon.png",
 ];
 
 for (const asset of staticAssets) {
