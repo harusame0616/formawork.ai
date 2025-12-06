@@ -20,7 +20,6 @@ import {
 import { RequiredBadge } from "@workspace/ui/components/required-badge";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { LoadingIcon } from "@/components/loading-icon";
 import { UserRole } from "@/features/auth/user/role";
 import { useIsHydrated } from "@/libs/use-is-hydrated";
 import { registerStaffAction } from "./register-staff-action";
@@ -220,15 +219,14 @@ export function EditStaffForm({ disabled: disabledProp }: EditStaffFormProps) {
 					>
 						キャンセル
 					</Button>
-					<Button className="min-w-[120px]" disabled={disabled} type="submit">
-						{form.formState.isSubmitting ? (
-							<>
-								<LoadingIcon className="mr-2" />
-								登録中...
-							</>
-						) : (
-							"登録する"
-						)}
+					<Button
+						className="min-w-[120px]"
+						disabled={disabled}
+						isProcessing={form.formState.isSubmitting}
+						processingLabel="登録中"
+						type="submit"
+					>
+						登録する
 					</Button>
 				</div>
 			</form>

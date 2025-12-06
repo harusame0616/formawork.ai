@@ -16,7 +16,6 @@ import { OptionalBadge } from "@workspace/ui/components/optional-badge";
 import { RequiredBadge } from "@workspace/ui/components/required-badge";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { LoadingIcon } from "@/components/loading-icon";
 import { editCustomerAction } from "@/features/customer/edit/edit-customer-action";
 import { useIsHydrated } from "@/libs/use-is-hydrated";
 import type { EditCustomerParams } from "../edit/schema";
@@ -190,26 +189,24 @@ export function EditCustomerForm(
 						キャンセル
 					</Button>
 					{props?.customerId ? (
-						<Button className="min-w-[120px]" disabled={disabled} type="submit">
-							{form.formState.isSubmitting ? (
-								<>
-									<LoadingIcon className="mr-2" />
-									編集中
-								</>
-							) : (
-								"編集する"
-							)}
+						<Button
+							className="min-w-[120px]"
+							disabled={disabled}
+							isProcessing={form.formState.isSubmitting}
+							processingLabel="編集中"
+							type="submit"
+						>
+							編集する
 						</Button>
 					) : (
-						<Button className="min-w-[120px]" disabled={disabled} type="submit">
-							{form.formState.isSubmitting ? (
-								<>
-									<LoadingIcon className="mr-2" />
-									登録中...
-								</>
-							) : (
-								"登録する"
-							)}
+						<Button
+							className="min-w-[120px]"
+							disabled={disabled}
+							isProcessing={form.formState.isSubmitting}
+							processingLabel="登録中"
+							type="submit"
+						>
+							登録する
 						</Button>
 					)}
 				</div>

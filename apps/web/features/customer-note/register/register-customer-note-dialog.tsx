@@ -27,7 +27,6 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as v from "valibot";
-import { LoadingIcon } from "@/components/loading-icon";
 import { CustomerNoteImageInput } from "../list/customer-note-image-input";
 import { registerCustomerNoteAction } from "./register-customer-note-action";
 import { useImageUpload } from "./use-image-upload";
@@ -229,18 +228,12 @@ export function RegisterCustomerNoteDialog({
 								キャンセル
 							</Button>
 							<Button
-								className="min-w-[120]"
-								disabled={isProcessing}
+								className="min-w-[120px]"
+								isProcessing={isProcessing}
+								processingLabel={isUploading ? "アップロード中" : "登録中"}
 								type="submit"
 							>
-								{isProcessing ? (
-									<>
-										<LoadingIcon className="mr-2" />
-										{isUploading ? "アップロード中" : "登録中"}
-									</>
-								) : (
-									"登録"
-								)}
+								登録
 							</Button>
 						</DialogFooter>
 					</form>
