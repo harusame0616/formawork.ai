@@ -6,8 +6,8 @@ catalog:
   react: 19.2.1
   react-dom: 19.2.1
   next: 16.0.7
-  tailwindcss: 4.1.16
-  '@tailwindcss/postcss': 4.1.16
+  tailwindcss: 4.1.17
+  '@tailwindcss/postcss': 4.1.17
   '@radix-ui/react-slot': 1.2.3
   '@radix-ui/react-label': 2.1.8
   '@radix-ui/react-switch': 1.2.6
