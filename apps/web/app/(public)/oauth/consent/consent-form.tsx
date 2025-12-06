@@ -3,14 +3,7 @@
 import { createClient } from "@repo/supabase/nextjs/client";
 import { useState } from "react";
 
-type AuthDetails = {
-	client?: { name?: string };
-	redirect_uri?: string;
-	redirect_url?: string;
-	scopes?: string[];
-	scope?: string;
-	user?: unknown;
-};
+type AuthDetails = Record<string, unknown>;
 
 export function ConsentForm({ authorizationId }: { authorizationId: string }) {
 	const [loading, setLoading] = useState(false);
