@@ -1,0 +1,40 @@
+name: Dependabot 自動マージ
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: dependabot-auto-merge-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  auto-merge:
+    name: Dependabot PR の自動マージ
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # Dependabot の PR のみ対象
+    if: github.actor == 'dependabot[bot]'
+
+    steps:
+      - name: Dependabot メタデータ取得
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: 更新情報をログ出力
+        run: |
+          echo "パッケージエコシステム: ${{ steps.metadata.outputs.package-ecosystem }}"
+          echo "更新タイプ: ${{ steps.metadata.outputs.update-type }}"
+          echo "依存関係名: ${{ steps.metadata.outputs.dependency-names }}"
+
+      - name: 自動マージ有効化
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
