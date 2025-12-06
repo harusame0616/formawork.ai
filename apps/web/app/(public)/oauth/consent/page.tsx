@@ -39,21 +39,10 @@ async function ConsentContent({
 		);
 	}
 
-	const { data: authDetails, error } =
-		await supabase.auth.oauth.getAuthorizationDetails(authorizationId);
-
-	console.log("OAuth authDetails:", JSON.stringify(authDetails, null, 2));
-
-	if (error || !authDetails) {
-		return (
-			<div>Error: {error?.message || "Invalid authorization request"}</div>
-		);
-	}
-
-	// Try approving directly to test
+	// Try approving directly WITHOUT calling getAuthorizationDetails first
 	const approveResult =
 		await supabase.auth.oauth.approveAuthorization(authorizationId);
-	console.log("OAuth direct approve test:", {
+	console.log("OAuth direct approve (without getAuthorizationDetails):", {
 		data: approveResult.data,
 		error: approveResult.error
 			? {
@@ -64,28 +53,26 @@ async function ConsentContent({
 			: null,
 	});
 
+	if (approveResult.error) {
+		return (
+			<div>
+				<h1>OAuth Error</h1>
+				<p>authorization_id: {authorizationId}</p>
+				<p>user_id: {user.id}</p>
+				<p>Error: {approveResult.error.message}</p>
+				<p>Code: {approveResult.error.code}</p>
+			</div>
+		);
+	}
+
+	// If successful, show redirect URL
 	return (
 		<div>
-			<h1>Authorize {JSON.stringify(authDetails.user)}</h1>
-			<p>This application wants to access your account.</p>
-			<div>{authDetails.scope}</div>
-			<div>
-				<strong>Direct approve test result:</strong>
-				<pre>
-					{approveResult.error
-						? `Error: ${approveResult.error.message}`
-						: `Success: ${approveResult.data?.redirect_url}`}
-				</pre>
-			</div>
-			<form action="/api/oauth/decision" method="POST">
-				<input name="authorization_id" type="hidden" value={authorizationId} />
-				<button name="decision" type="submit" value="approve">
-					Approve
-				</button>
-				<button name="decision" type="submit" value="deny">
-					Deny
-				</button>
-			</form>
+			<h1>Authorization Successful!</h1>
+			<p>Redirect URL: {approveResult.data?.redirect_url}</p>
+			<p>
+				<a href={approveResult.data?.redirect_url}>Click here to continue</a>
+			</p>
 		</div>
 	);
 }
