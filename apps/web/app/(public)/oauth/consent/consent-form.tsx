@@ -35,13 +35,29 @@ export function ConsentForm({ authorizationId }: { authorizationId: string }) {
 		loadDetails();
 	}, [authorizationId, supabase.auth.oauth]);
 
-	function handleApprove() {
-		if (!authDetails?.redirect_url) {
-			setError("リダイレクト URL が見つかりません");
+	async function handleApprove() {
+		setLoading(true);
+		setError(null);
+
+		console.log("[Consent] Calling approveAuthorization...");
+
+		const { data, error } =
+			await supabase.auth.oauth.approveAuthorization(authorizationId);
+
+		if (error) {
+			console.error("[Consent] approveAuthorization error:", error);
+			setError(
+				`承認処理に失敗しました: ${error.message} (${error.code || "unknown"})`,
+			);
+			setLoading(false);
 			return;
 		}
-		// getAuthorizationDetails の redirect_url には既に認証コードが含まれている
-		window.location.href = authDetails.redirect_url;
+
+		console.log(
+			"[Consent] approveAuthorization success, redirecting to:",
+			data.redirect_url,
+		);
+		window.location.href = data.redirect_url;
 	}
 
 	async function handleDeny() {
